@@ -8,11 +8,11 @@ Oh yeah, so yet another Bugzilla clone eh? Well, not so!
 
 This is:
 
-1) Simple to Use
-2) Simple to Setup
-3) Includes a Wiki
-4) Great for Personal Projects (coz, there are no users ;)
-5) No Bitching in the Comments Area (coz, there are no comments ;)
+* Simple to Use
+* Simple to Setup
+* Includes a Wiki
+* Great for Personal Projects (coz, there are no users ;)
+* No Bitching in the Comments Area (coz, there are no comments ;)
    
 
 ## DB DESIGN: ##
