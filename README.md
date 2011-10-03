@@ -31,26 +31,23 @@ README for Version 0.1
 
 
 ## URL SPEC: ##
-       /					-> list Projects
-       						   [create new project,
-						    rename project]
+       /
+       [ list Projects, create new project, rename project]
 
        /new_project?name=<Project Name> 		
        /rename_project?name=<Old Name>&newname=<New Name>
        /delete_project?name=<Project Name>
 
-       /<Project Name>/				-> [view bugs/wiki, delete] 
+       [ view bugs/wiki, delete the project] 
+       /<Project Name>/				
 
-       /<Project Name>/bug/?id=<bug_id> 	-> describes the bug report 
-       		 			   	    and the bug parameters
-						    allows to change status
-						    or delete the bug
+       [ view bug report, change status, delete bug]
+       /<Project Name>/bug/?id=<bug_id> 	
        /delete_bug?pid=<project_id>&id=<bug_id>	
        /update_bug?pid=<project_id>&id=<bug_id>   
 
-       /<Project Name>/wiki/?id=<wiki_id> 	-> displays the wiki page;
-						    allows you to edit,
-						    rename or delete it       
+       [ view wiki page, edit, delete page]
+       /<Project Name>/wiki/?id=<wiki_id> 	       
        /delete_wiki?pid=<project_id>&id=<wiki_id>	
        /update_wiki?pid=<project_id>&id=<wiki_id>   
 
@@ -67,8 +64,8 @@ README for Version 0.1
 
 ## FUTURE PLANS: (Ordered by Priority) ##
 
-       Add TARGET Planning (EXCEL type tables that many people love)
-       Configs, Preferences for categories, styles and all that jazz
-       A little command line tool to post bugs
-       Authentication Token (SSL??)
-       Users, Comments, Assignees, Email Floods :-P
+       * Add TARGET Planning (EXCEL type tables that many people love)
+       * Configs, Preferences for categories, styles and all that jazz
+       * A little command line tool to post bugs
+       * Authentication Token (SSL??)
+       * Users, Comments, Assignees, Email Floods :-P
