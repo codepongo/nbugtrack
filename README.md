@@ -68,6 +68,6 @@ This is:
 
 * Add TARGET Planning (EXCEL type tables that many people love)
 * Configs, Preferences for categories, styles and all that jazz
-* A little command line tool to post bugs
+* A little command line tool (nbt) to post bugs
 * Authentication Token (SSL??)
 * Users, Comments, Assignees, Email Floods :-P
