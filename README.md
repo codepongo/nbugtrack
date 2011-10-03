@@ -59,10 +59,9 @@ This is:
 * router.py	-> Route Requests to functions
 * db.py	  	-> All database handling code, should be able to
         	   swap databases without changing anything else
-* project.py	-> All project related code 
-* bug.py	-> All bug related code
-* wiki.py	-> All wiki related code	
+* project.py	-> Model logic
 * nbugtrack.py	-> Main module	
+* view.py	-> Display logic
 
 ## FUTURE PLANS: (Ordered by Priority) ##
 
