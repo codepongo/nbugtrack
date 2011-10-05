@@ -19,21 +19,31 @@ A simple sqlite3 database with the following tables:
 * __list/create/rename projects__
 
 `/`
+
 `/new_project?name=<Project Name>`
+
 `/rename_project?name=<Old Name>&newname=<New Name>`
 
 * __view/delete project__
+
 `/<Project Name>/`
+
 `/delete_project?name=<Project Name>`
 				
 * __view bug report, change status, delete bug__
+
 `/<Project Name>/bug/?id=<bug_id>` 
+
 `/delete_bug?pid=<project_id>&id=<bug_id>`
+
 `/update_bug?pid=<project_id>&id=<bug_id>`
 
 * __view wiki page, edit, delete page__
+
 `/<Project Name>/wiki/?id=<wiki_id>`
+
 `/delete_wiki?pid=<project_id>&id=<wiki_id>`
+
 `/update_wiki?pid=<project_id>&id=<wiki_id>`
 
 ## APP DESIGN: ##
