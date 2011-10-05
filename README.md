@@ -21,15 +21,15 @@ This is:
 	  
 	BUGS:
 
-		id(pkey), projectid, shortname, description, priority, status
+		id integer primary key autoincrement, projectid integer, shortname text, description text, priority text, status text, foreign key(projectid) references project(id)
 
 	WIKI:
 	
-		id(pkey), projectid, shortname, content 
+		id integer primary key, projectid integer, shortname text, content text, forieign key(projectid) references project(id) 
 
 	PROJECT:
 
-		id(pkey), shortname, description
+		id integer primary key, shortname text unique, description text
 
 
 ## URL SPEC: ##
@@ -66,7 +66,8 @@ This is:
 ## FUTURE PLANS: (Ordered by Priority) ##
 
 * Add TARGET Planning (EXCEL type tables that many people love)
+* MySQL / Postgres Database Support
 * Configs, Preferences for categories, styles and all that jazz
 * A little command line tool (nbt) to post bugs
-* Authentication Token (SSL??)
-* Users, Comments, Assignees, Email Floods :-P
+* Authentication / Users (SSL)
+* Comments, Assignees, Email Floods :-P

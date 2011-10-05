@@ -5,21 +5,40 @@
 import nbt_global
 import sqlite3
 
-def create_table(*params):
-    ''' create a table'''
-    pass
+def exec_cmd(dbname, cmd_string):
+    ''' execute the command on the database '''
+    try:
+        conn = sqlite3.connect(dbname)
+        cur = conn.cursor()
 
-def insert_row(*params):
-    ''' insert a new row'''
-    pass
+        if cmd_string != "":
+            cur.execute(cmd_string)
+        else:
+            nbt_global.DEBUG("exec_cmd: ",cmd_string,"!")
+            exit()
+        conn.commit()
+        cur.close()
+    except sqlite3.OperationalError as e:
+        nbt_global.DEBUG("exec_cmd: "+str(e),cmd_string,"!")
+        exit()
 
-def update_row(*params):
-    ''' update the given row'''
-    pass
+def exec_query(dbname, query_string, qualifier=""):
+    ''' execute the query on the database and return a list of matching rows'''
+    try:
+        conn = sqlite3.connect(dbname)
+        cur = conn.cursor()
+        query_result = []
 
-def delete_row(*params):
-    ''' delete the given row'''
-    pass
-
-def select(*params):
-    pass
+        if query_string != "":
+            if qualifier=="": cur.execute(query_string)
+            else: cur.execute(query_string, qualifier)
+            conn.commit()
+            query_result = cur.fetchall()
+            cur.close()
+            return query_result
+        else:
+            nbt_global.DEBUG("exec_cmd: ",query_string,"!")
+            exit()
+    except sqlite3.OperationalError as e:
+        nbt_global.DEBUG("exec_cmd: "+str(e),query_string,"!")
+        

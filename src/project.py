@@ -1,10 +1,13 @@
 
-import nbt_global.py
+import nbt_global
 import db.py
 
 def init_db():
     ''' initialize data base here:
-             basically, run create table: project, bug, wiki '''
+             basically, create tables: project, bug, wiki '''
+    db.exec_cmd(nbt_global.def_dbname, nbt_global.project_table)
+    db.exec_cmd(nbt_global.def_dbname, nbt_global.bugs_table)
+    db.exec_cmd(nbt_global.def_dbname, nbt_global.wiki_table)
     pass
 
 def list_projects():
