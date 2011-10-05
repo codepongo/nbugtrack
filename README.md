@@ -8,9 +8,8 @@ Oh yeah, so yet another Bugzilla clone eh? Well, not so!
 
 This is:
 
-* Simple to Use
-* Simple to Setup
-* Includes a Wiki
+* Simple to Use and Setup
+* Includes a Wiki with Markdown formatting
 * Great for Personal Projects (coz, there are no users ;)
 * No Bitching in the Comments Area (coz, there are no comments ;)
    
