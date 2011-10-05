@@ -21,37 +21,32 @@ This is:
 	  
 	BUGS:
 
-		id integer primary key autoincrement, projectid integer, shortname text, description text, priority text, status text, foreign key(projectid) references project(id)
+		projectid integer, shortname text, description text, priority text, status text, foreign key(projectid) references project(id)
 
 	WIKI:
 	
-		id integer primary key, projectid integer, shortname text, content text, forieign key(projectid) references project(id) 
+		projectid integer, shortname text, content text, forieign key(projectid) references project(id) 
 
 	PROJECT:
 
-		id integer primary key, shortname text unique, description text
+		shortname text unique, description text
 
 
 ## URL SPEC: ##
-       /
-       [ list Projects, create new project, rename project]
+* _/_ : list Projects, create new project, rename project
+* _/new_project?name=<Project Name>_ 		
+* _/rename_project?name=<Old Name>&newname=<New Name>_
+* _/delete_project?name=<Project Name>_
 
-       /new_project?name=<Project Name> 		
-       /rename_project?name=<Old Name>&newname=<New Name>
-       /delete_project?name=<Project Name>
+* _/<Project Name>/_ : view bugs/wiki, delete the project
+				
+* _/<Project Name>/bug/?id=<bug_id>_ : view bug report, change status, delete bug
+* _/delete_bug?pid=<project_id>&id=<bug_id>_	
+* _/update_bug?pid=<project_id>&id=<bug_id>_   
 
-       [ view bugs/wiki, delete the project] 
-       /<Project Name>/				
-
-       [ view bug report, change status, delete bug]
-       /<Project Name>/bug/?id=<bug_id> 	
-       /delete_bug?pid=<project_id>&id=<bug_id>	
-       /update_bug?pid=<project_id>&id=<bug_id>   
-
-       [ view wiki page, edit, delete page]
-       /<Project Name>/wiki/?id=<wiki_id> 	       
-       /delete_wiki?pid=<project_id>&id=<wiki_id>	
-       /update_wiki?pid=<project_id>&id=<wiki_id>   
+* _/<Project Name>/wiki/?id=<wiki_id>_ : view wiki page, edit, delete page
+* _/delete_wiki?pid=<project_id>&id=<wiki_id>_ 	
+* _/update_wiki?pid=<project_id>&id=<wiki_id>_   
 
 
 ## APP DESIGN: ##
