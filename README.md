@@ -18,34 +18,40 @@ This is:
 ## DB DESIGN: ##
 
 A simple sqlite3 database with the following tables:
+
+0. PROJECT:
+
+		`shortname text unique, description text`
 	  
-	BUGS:
+1. BUGS:
 
-		projectid integer, shortname text, description text, priority text, status text, foreign key(projectid) references project(id)
+		`projectid integer, shortname text, description text, priority text, status text, foreign key(projectid) references project(rowid)`
 
-	WIKI:
+2. WIKI:
 	
-		projectid integer, shortname text, content text, forieign key(projectid) references project(id) 
-
-	PROJECT:
-
-		shortname text unique, description text
-
+		`projectid integer, shortname text, content text, forieign key(projectid) references project(rowid)`
 
 ## URL SPEC: ##
 * __/__ : list Projects, create new project, rename project
+
   __/new_project?name=<Project Name>__ 		
+
   __/rename_project?name=<Old Name>&newname=<New Name>__
+
   __/delete_project?name=<Project Name>__
 
 * __/<Project Name>/__ : view bugs/wiki, delete the project
 				
 * __/<Project Name>/bug/?id=<bug_id>__ : view bug report, change status, delete bug
+
 __/delete_bug?pid=<project_id>&id=<bug_id>__	
+
 __/update_bug?pid=<project_id>&id=<bug_id>__   
 
 * __/<Project Name>/wiki/?id=<wiki_id>__ : view wiki page, edit, delete page
+
 __/delete_wiki?pid=<project_id>&id=<wiki_id>__ 	
+
 __/update_wiki?pid=<project_id>&id=<wiki_id>__   
 
 
