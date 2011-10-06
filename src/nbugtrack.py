@@ -21,6 +21,7 @@ def nbugtrack(environ, start_response):
 
     response = router.match(query)
 
+    # write a type dispatch here
     return response
 
 if __name__ == '__main__':

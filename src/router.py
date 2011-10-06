@@ -6,7 +6,7 @@ from nbt_global import DEBUG
 
 rtable = {
     '\/*$': 'list_projects',
-    '\/new_project\/*\?name=([\w\s%]+)$': 'new_project',
+    '\/new_project\/*\?name=([\w\s%]+)&desc=([\w\s%]+)$': 'new_project',
     '\/rename_project\/*\?id=(\w+)&newname=([\w\s%]+)$': 'rename_project',
     '\/update_project\/*\?id=(\w+)&desc=([\w\s%]+)$': 'update_project',
     '\/([\w\s%]+)\/*$': 'view_project',
@@ -21,7 +21,6 @@ rtable = {
 } 
 
 # re.compile(lvalue).match(query) -> eval(rvalue)
-# how cool is this? :)
 def match(query):
     ''' matches the pattern with the respective function'''
 
