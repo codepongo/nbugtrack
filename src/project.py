@@ -1,6 +1,6 @@
 
 import nbt_global
-import db.py
+import db
 
 def init_db():
     ''' initialize data base here:
@@ -8,23 +8,30 @@ def init_db():
     db.exec_cmd(nbt_global.def_dbname, nbt_global.project_table)
     db.exec_cmd(nbt_global.def_dbname, nbt_global.bugs_table)
     db.exec_cmd(nbt_global.def_dbname, nbt_global.wiki_table)
-    pass
 
 def list_projects():
     ''' if projects table not there, database is corrupt,
         hence call init_db()'''
     pass
 
-def new_project():
+def new_project(name):
     ''' add a new project to the projects table'''
     pass
 
-def rename_project():
+def rename_project(id, newname):
     ''' rename the project '''
     pass
 
-def delete_project():
+def update_project(id, desc):
+    ''' update the project description '''
+    pass
+
+def delete_project(id):
     ''' delete the project, associated wiki pages and bugs'''
+    pass
+
+def view_project(project_name):
+    ''' view the project contents, bugs, wiki info'''
     pass
 
 def get_bugs():
@@ -35,30 +42,30 @@ def get_wiki():
     ''' returns the wiki pages associated with this project '''
     pass
 
-def disp_preject_page():
-    ''' displays the project page'''
-    pass
-
-def disp_bug_page():
+def view_bug(project_name, id):
     ''' displays the bug page'''
     pass
 
-def update_bug():
+def update_bug(id, params):
     ''' update the bug'''
     pass
 
-def delete_bug():
+def delete_bug(id):
     ''' delete the bug'''
     pass
 
-def disp_wiki_page():
+def view_wiki(project_name, id):
     ''' displays the wiki page'''
     pass
 
-def delete_wiki():
+def delete_wiki(id):
     ''' deletes the wiki page'''
     pass
 
-def update_wiki():
+def update_wiki(id, content):
     ''' updates the wiki page'''
+    pass
+
+def rename_wiki(id, newname):
+    ''' renames the wiki page to given name'''
     pass
