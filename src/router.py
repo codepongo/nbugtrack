@@ -31,5 +31,5 @@ def match(query):
         if exists != None:
             exec_string = rtable[pattern]+'('+', '.join('\"'+i+'\"' for i in list(exists.groups()))+')'
             DEBUG(exec_string,err_chr='E')
-            eval('project.'+exec_string)
+            return eval('project.'+exec_string)
                   

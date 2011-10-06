@@ -1,4 +1,5 @@
 
+import os
 import nbt_global
 import db
 
@@ -12,7 +13,11 @@ def init_db():
 def list_projects():
     ''' if projects table not there, database is corrupt,
         hence call init_db()'''
-    pass
+    if not os.path.exists(nbt_global.def_dbname):
+        init_db()
+    else:
+        proj_list = db.exec_query(nbt_global.def_dbname, 'select * from projects')
+        return str(proj_list)
 
 def new_project(name):
     ''' add a new project to the projects table'''
@@ -30,15 +35,18 @@ def delete_project(id):
     ''' delete the project, associated wiki pages and bugs'''
     pass
 
+# XXX: THIS IS A WHOLE FUCKING SOUP OF SPAGHETTI
 def view_project(project_name):
     ''' view the project contents, bugs, wiki info'''
-    pass
+    project_id = str(db.exec_query(nbt_global.def_dbname, 'select rowid from projects where shortname=?',(project_name,))[0][0]) # has to be a tuple
+    project_description = str(db.exec_query(nbt_global.def_dbname, 'select description from projects where rowid=?',(project_id,))[0][0])
+    return project_description 
 
-def get_bugs():
+def get_bugs(projectid):
     ''' returns the bugs associated with this project '''
     pass
 
-def get_wiki():
+def get_wiki(projectid):
     ''' returns the wiki pages associated with this project '''
     pass
 

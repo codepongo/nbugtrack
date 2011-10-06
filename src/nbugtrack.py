@@ -2,16 +2,26 @@
 
 import sys
 import os
+import router
+import urllib
 
 from wsgiref.simple_server import make_server
+from wsgiref.util import *
 
 def nbugtrack(environ, start_response):
     status = '200 OK'
     headers = [('Content-type', 'text/plain')]
     
     start_response(status, headers)
+    
+    if environ["QUERY_STRING"] != '':
+        query = urllib.unquote(environ["PATH_INFO"])+"?"+urllib.unquote(environ["QUERY_STRING"])
+    else:
+        query = urllib.unquote(environ["PATH_INFO"])
 
-    return "Hello, world"
+    response = router.match(query)
+
+    return response
 
 if __name__ == '__main__':
     port_to_run = 8765
