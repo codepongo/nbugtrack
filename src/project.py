@@ -18,7 +18,7 @@ def list_projects():
         init_db()
     else:
         proj_list = db.exec_cmd(nbt_global.def_dbname, 'select * from projects')
-        return str(proj_list)
+        return [proj_list,"projects"]
 
 def new_project(name, desc):
     ''' add a new project to the projects table'''
@@ -43,33 +43,34 @@ def delete_project(id):
     return list_projects()
 
 def view_project(project_name="",id=""):
-    ''' view the project contents, bugs, wiki info'''
-    if project_name != "":
+    ''' view the project contents, bugs, wiki info.
+    '''
+    if project_name != "": # returns a list of [string, tuple, tuple]
         project_id = str(db.exec_cmd(nbt_global.def_dbname, 'select rowid from projects where shortname=?',(project_name,))[0][0]) # has to be a tuple
         project_description = str(db.exec_cmd(nbt_global.def_dbname, 'select description from projects where rowid=?',(project_id,))[0][0])
-        return project_description + "\n" + get_bugs(project_id) + "\n" + get_wiki(project_id)
+        return [[project_description, get_bugs(project_id), get_wiki(project_id)], "view_project"]
     elif id != "":
         project_description = str(db.exec_cmd(nbt_global.def_dbname, 'select description from projects where rowid=?',(id,))[0][0])
-        return project_description + "\n" + get_bugs(id) + "\n" + get_wiki(id)
+        return [[project_description, get_bugs(id), get_wiki(id)], "view_project"]
     else:
         nbt_global.DEBUG('view_project','either project_name or id needs to be present',err_chr='!!')
         exit()
 
 def get_bugs(projectid):
     ''' returns the bugs associated with this project '''
-    project_bugs = str(db.exec_cmd(nbt_global.def_dbname, 'select * from bugs where projectid=?', (projectid,)))
-    return project_bugs
+    project_bugs = db.exec_cmd(nbt_global.def_dbname, 'select * from bugs where projectid=?', (projectid,))
+    return [project_bugs, "bugs"] 
 
 def get_wiki(projectid):
     ''' returns the wiki pages associated with this project '''
-    project_wiki = str(db.exec_cmd(nbt_global.def_dbname, 'select * from wiki where projectid=?', (projectid,)))
-    return project_wiki
+    project_wiki = db.exec_cmd(nbt_global.def_dbname, 'select * from wiki where projectid=?', (projectid,))
+    return [project_wiki, "wiki"]
 
 def view_bug(project_name="", id=""):
     ''' displays the bug page'''
     if not id == "":
-        bug_descr = str(db.exec_cmd(nbt_global.def_dbname, 'select * from bugs where id=?',(id,)))
-        return bug_descr
+        bug_descr = db.exec_cmd(nbt_global.def_dbname, 'select * from bugs where id=?',(id,))
+        return [bug_descr, "view_bug"]
     else:
         nbt_global.DEBUG('view_bug','id needs to be present',err_chr='!!')
         exit()
@@ -88,8 +89,8 @@ def delete_bug(id):
 def view_wiki(project_name="", id=""):
     ''' displays the wiki page'''
     if not id == "":
-        wiki_descr = str(db.exec_cmd(nbt_global.def_dbname, 'select * from wiki where id=?',(id,)))
-        return wiki_descr
+        wiki_descr = db.exec_cmd(nbt_global.def_dbname, 'select * from wiki where id=?',(id,))
+        return [wiki_descr, "view_wiki"]
     else:
         nbt_global.DEBUG('view_bug','id needs to be present',err_chr='!!')
         exit()

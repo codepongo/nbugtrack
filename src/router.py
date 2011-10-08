@@ -4,6 +4,9 @@ import re
 import project
 from nbt_global import DEBUG
 
+# Some people, when confronted with a problem, think "I know, I'll use regular 
+# expressions." Now they have two problems.  --jwz
+# (http://www.jwz.org/hacks/gdb-highlight.el)
 rtable = {
     '\/*$': 'list_projects',
     '\/new_project\/*\?name=([\w\s%]+)&desc=([\w\s%]+)$': 'new_project',

@@ -2,7 +2,7 @@
 README for Version 0.1
 ----------------------
 
-## PR: ##
+## PITCH: ##
 
 Oh yeah, so yet another Bugzilla clone eh? Well, not so! 
 
@@ -12,6 +12,11 @@ This is:
 * Includes a Wiki with Markdown formatting
 * Great for Personal Projects (coz, there are no users ;)
 * No Bitching in the Comments Area (coz, there are no comments ;)
+
+## DEPS: ##
+
+Stock python, sqlite
+Markdown module for the wiki
    
 ## FUTURE PLANS: (Ordered by Priority) ##
 

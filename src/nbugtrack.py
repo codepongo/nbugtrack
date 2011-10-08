@@ -4,6 +4,7 @@ import sys
 import os
 import router
 import urllib
+import view
 
 from wsgiref.simple_server import make_server
 from wsgiref.util import *
@@ -21,8 +22,7 @@ def nbugtrack(environ, start_response):
 
     response = router.match(query)
 
-    # write a type dispatch here
-    return response
+    return showView(response) # does a type dispatch and prints the content
 
 if __name__ == '__main__':
     port_to_run = 8765
