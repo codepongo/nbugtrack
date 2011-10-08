@@ -15,8 +15,7 @@ This is:
 
 ## DEPS: ##
 
-Stock python, sqlite
-Markdown module for the wiki
+Stock python, sqlite; Markdown module for the wiki
    
 ## FUTURE PLANS: (Ordered by Priority) ##
 
