@@ -19,6 +19,7 @@ A simple sqlite3 database with the following tables:
 
 * router.py	-> Route Requests to functions
 * db.py	  	-> Database querying code
+* nbugtrack.py	-> Main module (controller)
 * project.py	-> Model logic
 * view.py	-> Display logic
 
