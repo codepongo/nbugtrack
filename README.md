@@ -15,7 +15,9 @@ This is:
 
 ## DEPS: ##
 
-Stock python, sqlite; Markdown module for the wiki
+Stock python, sqlite; Markdown module for the wiki can be installed like so:
+
+      [sudo] easy_install Markdown
    
 ## FUTURE PLANS: (Ordered by Priority) ##
 

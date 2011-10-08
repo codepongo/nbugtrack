@@ -18,10 +18,8 @@ A simple sqlite3 database with the following tables:
 ## APP DESIGN: ##
 
 * router.py	-> Route Requests to functions
-* db.py	  	-> All database handling code, should be able to
-        	   swap databases without changing anything else
+* db.py	  	-> Database querying code
 * project.py	-> Model logic
-* nbugtrack.py	-> Main module	
 * view.py	-> Display logic
 
 ## VIEW DESIGN: ##
