@@ -24,10 +24,10 @@ A simple sqlite3 database with the following tables:
 
 ## VIEW DESIGN: ##
 
-list_projects	-> [proj_list, "projects"]
-view_project	-> [[project_description, get_bugs, get_wiki], "view_project"]
-get_bugs	-> [project_bugs, "bugs"]
-get_wiki	-> [project_wiki, "wiki"]
-view_bug	-> [bug_descr, "view_bug"]
-view_wiki	-> [wiki_descr, "view_wiki"]
+* list_projects	-> `[proj_list, "projects"]`
+* view_project	-> `[[project_description, get_bugs, get_wiki], "view_project"]`
+* get_bugs	-> `[project_bugs, "bugs"]`
+* get_wiki	-> `[project_wiki, "wiki"]`
+* view_bug	-> `[bug_descr, "view_bug"]`
+* view_wiki	-> `[wiki_descr, "view_wiki"]`
 
