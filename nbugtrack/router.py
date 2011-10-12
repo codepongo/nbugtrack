@@ -5,8 +5,7 @@ import project
 from nbt_global import DEBUG
 
 # Some people, when confronted with a problem, think "I know, I'll use regular 
-# expressions." Now they have two problems.  --jwz
-# (http://www.jwz.org/hacks/gdb-highlight.el)
+# expressions." Now they have two problems.  --jwz (http://www.jwz.org/hacks/gdb-highlight.el)
 rtable = {
     '\/*$': 'list_projects',
     '\/new_project\/*\?name=([\w\s%]+)&desc=([\w\s%]+)$': 'new_project',
@@ -20,7 +19,7 @@ rtable = {
     '\/([\w\s%]+)\/*\/wiki\/*\?id=(\w+)$': 'view_wiki',
     '\/delete_wiki\/*\?id=(\w+)$': 'delete_wiki',
     '\/rename_wiki\/*\?id=(\w+)&name=([\w\s%]+)$': 'rename_wiki',
-    '\/update_wiki\/*\?id=(\w+)&content=([\w\s%]+)$': 'update_wiki',
+#    '\/update_wiki\/*\?id=(\w+)&content=([\w\s%]+)$': 'update_wiki', 
 } 
 
 # re.compile(lvalue).match(query) -> eval(rvalue)

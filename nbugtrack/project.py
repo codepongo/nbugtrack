@@ -69,7 +69,7 @@ def get_wiki(projectid):
 def view_bug(project_name="", id=""):
     ''' displays the bug page'''
     if not id == "":
-        bug_descr = db.exec_cmd(nbt_global.def_dbname, 'select * from bugs where id=?',(id,))
+        bug_descr = db.exec_cmd(nbt_global.def_dbname, 'select * from bugs where rowid=?',(id,))
         return [bug_descr, "view_bug"]
     else:
         nbt_global.DEBUG('view_bug','id needs to be present',err_chr='!!')
@@ -78,7 +78,7 @@ def view_bug(project_name="", id=""):
 def update_bug(id, params):
     ''' update the bug'''
     projectid,shortname,description,priority,status = params.split(',')
-    db.exec_cmd(nbt_global.def_dbname, 'update bugs set projectid=?, shortname=?, description=?, priority=?, status=? where id=?', (projectid, shortname, description, priority, status, id,))
+    db.exec_cmd(nbt_global.def_dbname, 'update bugs set projectid=?, shortname=?, description=?, priority=?, status=? where rowid=?', (projectid, shortname, description, priority, status, id,))
     return view_bug(id=id)
 
 def delete_bug(id):
@@ -89,7 +89,7 @@ def delete_bug(id):
 def view_wiki(project_name="", id=""):
     ''' displays the wiki page'''
     if not id == "":
-        wiki_descr = db.exec_cmd(nbt_global.def_dbname, 'select * from wiki where id=?',(id,))
+        wiki_descr = db.exec_cmd(nbt_global.def_dbname, 'select * from wiki where rowid=?',(id,))
         return [wiki_descr, "view_wiki"]
     else:
         nbt_global.DEBUG('view_bug','id needs to be present',err_chr='!!')
@@ -97,16 +97,16 @@ def view_wiki(project_name="", id=""):
 
 def update_wiki(id, content):
     ''' updates the wiki page'''
-    db.exec_cmd(nbt_global.def_dbname, 'update wiki set content=? where id=?', (content, id,))
+    db.exec_cmd(nbt_global.def_dbname, 'update wiki set content=? where rowid=?', (content, id,))
     return view_wiki(id=id)
 
 def delete_wiki(id):
     ''' deletes the wiki page'''
     project_id = str(db.exec_cmd(nbt_global.def_dbname, 'select projectid from wiki where rowid=?', (id,))[0][0])
-    db.exec_cmd(nbt_global.def_dbname, 'update wiki set content=? where id=?', (content, id))
+    db.exec_cmd(nbt_global.def_dbname, 'update wiki set content=? where rowid=?', (content, id))
     return view_project(id=projectid)
 
 def rename_wiki(id, newname):
     ''' renames the wiki page to given name'''
-    db.exec_cmd(nbt_global.def_dbname,'update wiki set shortname=? where projectid=?',(newname, id))
+    db.exec_cmd(nbt_global.def_dbname,'update wiki set shortname=? where rowid=?',(newname, id))
     return view_project(id=id)

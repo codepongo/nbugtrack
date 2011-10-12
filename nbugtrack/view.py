@@ -14,5 +14,5 @@ def showView(data):
     list of 'string, tuple, tuple'in the case of view_project()
 
     '''
-    
+    return str(data)
     
