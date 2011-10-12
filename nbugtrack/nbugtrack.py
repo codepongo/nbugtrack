@@ -68,9 +68,7 @@ def parse_post_request(request_body):
         tmpname =  re.compile('Content-Disposition: form-data; name="([\w]+)"$').search(i)
 
         if tmpname != None:
-            name = ' '.join(i for i in list(tmpname.groups()))
-            request_tokens[index] = name
-
+            request_tokens[index]  = ' '.join(i for i in list(tmpname.groups()))
         index = index + 1
 
     # but regexes need not be used everywhere
