@@ -50,7 +50,7 @@ def nbugtrack(environ, start_response):
             except:
                 response_body = "error"
 
-# re's are great when you want
+# regexes are great when you want
 def parse_post_request(request_body):
     request_tokens = request_body.split('\r\n') # sends CR LF
     var_alist = {}
@@ -73,7 +73,7 @@ def parse_post_request(request_body):
 
         index = index + 1
 
-    # but re's need not be used everywhere
+    # but regexes need not be used everywhere
     while(len(request_tokens) != 0):
         try:
             name = request_tokens.pop(0)
