@@ -79,13 +79,8 @@ def show_bugs(content):
     print(content)
     
     for bugs_data in content:
-        bugid = str(bugs_data[0])
-        name = str(bugs_data[1])
-        bug_description = str(bugs_data[2])
-        priority = str(bugs_data[3])
-        status = str(bugs_data[4])
-
-        bugs_html += '''<tr><td><a href="bug/?id='''+bugid+'''">'''+bugid+'''</a></td>'''+'''<td><a href="bug/?id='''+bugid+'''">'''+name+'''</a></td>'''+'''<td><a href="bug/?id='''+bugid+'''">'''+bug_description[:nbt_global.def_shortchars]+"..."+'''</a></td>'''+'''<td><a href="bug/?id='''+bugid+'''">'''+priority+'''</a></td>'''+'''<td><a href="bug/?id='''+bugid+'''">'''+status+'''</a></td></tr>'''
+        bugid,name,bug_description,priority,status = (str(i) for i in bugs_data)
+        bugs_html += '''<tr><td><a href="bug/?id='''+bugid+'''">'''+bugid+'''</a></td>'''+'''<td><a href="bug/?id='''+bugid+'''">'''+name+'''</a></td>'''+'''<td><a href="bug/?id='''+bugid+'''">'''+priority+'''</a></td>'''+'''<td><a href="bug/?id='''+bugid+'''">'''+status+'''</a></td></tr>'''
         
     bugs_html += '''</table></div>'''
     return bugs_html
@@ -97,8 +92,7 @@ def show_wiki(content):
     wiki_html += '''<tr><th>Page Id</th><th>Page Name</th></tr>'''
 
     for wiki_data in content:
-        wikiid = str(wiki_data[0])
-        name = str(wiki_data[1])
+        wikiid,name,content = (str(i) for i in wiki_data)
 
         wiki_html += '''<tr><td><a href="wiki/?id='''+wikiid+'''">'''+wikiid+'''</a></td>'''+'''<td><a href="wiki/?id='''+wikiid+'''">'''+name+'''</a></td></tr>'''
 
@@ -111,7 +105,11 @@ def view_this_bug(content):
     bug_html = '''<div id="bug_data"><div id="bug_title">'''+bugid+''': '''+name+'''</div>'''
     bug_html += '''<div id="bug_stat">'''+stat+'''</div>'''
     bug_html += '''<div id="bug_prio">'''+prio+'''</div>'''
-    bug_html += '''<div id="bug_desc">'''+desc+'''</div>'''
+
+    if markdown_available == True:
+        bug_html += '''<div id="bug_desc">'''+str(markdown.markdown(desc))+'''</div>'''
+    else:
+        bug_html += '''<div id="bug_desc">'''+str(desc)+'''</div>'''
     bug_html += '''</div>'''
 
     return default_template.replace("$page_body",bug_html).replace("$page_title","Bug: "+bugid)
