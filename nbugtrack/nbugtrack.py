@@ -23,15 +23,27 @@ def nbugtrack(environ, start_response):
             query = path
             
         # does a type dispatch and prints the content
-        response = view.showView(router.match(query))
-        
-        status = '200 OK'
-        headers = [('Content-type', 'text/html'), 
-                   ('Content-length', str(len(response)))]
+        response = router.match(query)
+
+        if response != None:
+            content_type = "text/html"
+            status = "200 OK"
+            response = view.showView(response)
+
+            if type(response) == list: # resource
+                content_type = response[1]
+                response = response[0]
+
+                if content_type == 'none':
+                    status = '404 Not Found'
+
+            headers = [('Content-type', content_type), 
+                       ('Content-length', str(len(response)))]
     
-        start_response(status, headers)
-        return [response]
-    
+            start_response(status, headers)
+            return [response]
+        else:
+            return ["error"]
     elif method == 'POST':
         response_body = ""
         try:

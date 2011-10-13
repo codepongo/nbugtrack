@@ -111,3 +111,24 @@ def rename_wiki(id, newname):
     ''' renames the wiki page to given name'''
     db.exec_cmd(nbt_global.def_dbname,'update wiki set shortname=? where rowid=?',(newname, id))
     return view_project(id=id)
+
+# XXX: check for '../../' type shit
+def send_file(filename):
+    ''' send any requested file'''
+    ext = os.path.splitext(filename)[1]
+
+    if ext == '.js':
+        folder_path="js"
+        mtype = "text/javascript"
+    elif ext == '.css':
+        folder_path="css"
+        mtype = "text/css"
+    elif ext == '.png' or ext == '.jgp':
+        folder_path="img"
+        mtype = "image/"+ext[1:]
+    full_name = "templates/"+folder_path+"/"+filename
+
+    if os.path.exists(full_name):
+        return [open(full_name).read(),mtype]
+    else:
+        return ['','none']

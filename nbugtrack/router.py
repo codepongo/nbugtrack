@@ -20,6 +20,11 @@ rtable = {
 #    '\/update_project\/*\?id=(\w+)&desc=([\w\s%]+)$': 'update_project',
 #    '\/update_bug\/*\?id=(\w+)&params=([\w\s,%]+)$': 'update_bug',
 #    '\/update_wiki\/*\?id=(\w+)&content=([\w\s%]+)$': 'update_wiki', 
+
+######## any js,css,img resource files ##########
+    '\/*js\/*([\w\-\.]+)$': 'send_file',
+    '\/*css\/*([\w\-\.]+)$': 'send_file',
+    '\/*img\/*([\w\-\.]+)$': 'send_file',
 } # updates are done with POST
 
 # re.compile(lvalue).match(query) -> eval(rvalue)
@@ -33,4 +38,4 @@ def match(query):
             exec_string = rtable[pattern]+'('+', '.join('\"'+i+'\"' for i in list(exists.groups()))+')'
             DEBUG(exec_string,err_chr='E')
             return eval('project.'+exec_string)
-                  
+        

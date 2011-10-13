@@ -21,7 +21,7 @@ view_table = {
 }
 
 def get_template(template=nbt_global.def_template):
-    '''Gets the default HTML template; to change the appearance of the generated site, add your templates in the "templates" directory and change the def_template to that. The default template is a good place to begin.'''
+    '''Gets the default HTML template; to change the appearance of the generated site, add your templates in the "templates" directory and change the def_template to that. The default `index.html` template is a good place to begin.'''
     f = open("templates/"+template)
     temp_html = f.read()
     f.close()
@@ -33,8 +33,13 @@ def showView(data):
     ''' tuple in case of list_projects, get_bugs, get_wiki, view_bug, view_wiki
         list of 'string, tuple, tuple'in the case of view_project() '''
     result_type = data[1]
-    return view_table[result_type](data[0])
 
+    try:
+        response = view_table[result_type](data[0])
+        return response
+    except KeyError:
+        return data
+    
 def show_projects(content):
     ''' list_projects is the controller function '''
     proj_html = '''<div id="proj_data">
