@@ -6,8 +6,10 @@ import nbt_global
 
 try:
     import markdown
+    markdown_available = True
 except ImportError as e:
     nbt_global.DEBUG(str(e), "Markdown not available, expect wiki pages to have limited appeal :P" ,"!")
+    markdown_available = False
 
 view_table = {
     "projects": lambda(content): show_projects(content), # screwed up the naming
@@ -48,16 +50,77 @@ def show_projects(content):
     return default_template.replace("$page_body",proj_html).replace("$page_title","Projects")
 
 def view_this_project(content):
-    return str(content)
+    ''' view the project description; bugs and wiki pages associated with it'''
+    name = str(content[0])
+    description = str(content[1])
+    bugs_list = content[2]
+    wiki_list = content[3]
+    
+    details_html = '''<div id="project_details_data">
+                      <div id="project_name">
+                      ''' + name + '''
+                      <div id="project_description">
+                      ''' + description + '''</div>'''
+    details_html += show_bugs(bugs_list[0])
+    details_html += show_wiki(wiki_list[0])
+
+    return default_template.replace("$page_body",details_html).replace("$page_title","Project: "+name)
 
 def show_bugs(content):
-    return str(content)
+    ''' return a bugs table '''
+    bugs_html = '''<div id="bugs_data">
+                   <table class="list_bugs">'''
+    bugs_html += '''<tr><th>Id</th><th>Short Name</th><th>Description</th><th>Priority</th><th>Status</th></tr>'''
+    print(content)
+    
+    for bugs_data in content:
+        bugid = str(bugs_data[0])
+        name = str(bugs_data[1])
+        bug_description = str(bugs_data[2])
+        priority = str(bugs_data[3])
+        status = str(bugs_data[4])
 
+        bugs_html += '''<tr><td><a href="bug/?id='''+bugid+'''">'''+bugid+'''</a></td>'''+'''<td><a href="bug/?id='''+bugid+'''">'''+name+'''</a></td>'''+'''<td><a href="bug/?id='''+bugid+'''">'''+bug_description[:nbt_global.def_shortchars]+"..."+'''</a></td>'''+'''<td><a href="bug/?id='''+bugid+'''">'''+priority+'''</a></td>'''+'''<td><a href="bug/?id='''+bugid+'''">'''+status+'''</a></td></tr>'''
+        
+    bugs_html += '''</table></div>'''
+    return bugs_html
+    
 def show_wiki(content):
-    return str(content)
+    ''' return a wiki table '''
+    wiki_html = '''<div id="wiki_data">
+                   <table class="list_wiki">'''
+    wiki_html += '''<tr><th>Page Id</th><th>Page Name</th></tr>'''
+
+    for wiki_data in content:
+        wikiid = str(wiki_data[0])
+        name = str(wiki_data[1])
+
+        wiki_html += '''<tr><td><a href="wiki/?id='''+wikiid+'''">'''+wikiid+'''</a></td>'''+'''<td><a href="wiki/?id='''+wikiid+'''">'''+name+'''</a></td></tr>'''
+
+    wiki_html += '''</table></div>'''
+    return wiki_html
 
 def view_this_bug(content):
-    return str(content)
+    bugid, name, desc, prio, stat = [str(i) for i in content[0]]
+
+    bug_html = '''<div id="bug_data"><div id="bug_title">'''+bugid+''': '''+name+'''</div>'''
+    bug_html += '''<div id="bug_stat">'''+stat+'''</div>'''
+    bug_html += '''<div id="bug_prio">'''+prio+'''</div>'''
+    bug_html += '''<div id="bug_desc">'''+desc+'''</div>'''
+    bug_html += '''</div>'''
+
+    return default_template.replace("$page_body",bug_html).replace("$page_title","Bug: "+bugid)
 
 def view_this_wiki(content):
-    return str(content)
+    pageid,pagename,pagecontent = [str(i) for i in content[0]]
+
+    page_html = '''<div id="wiki_page"><div id="wiki_title">'''+pageid+''': '''+pagename+'''</div>'''
+
+    if markdown_available == True:
+        page_html += '''<div id="wiki_content">'''+str(markdown.markdown(pagecontent))+'''</div>'''
+    else:
+        page_html += '''<div id="wiki_content">'''+str(pagecontent)+'''</div>'''
+    page_html += '''</div>'''
+
+    return default_template.replace("$page_body",page_html).replace("$page_title","Wiki: "+pagename)
+

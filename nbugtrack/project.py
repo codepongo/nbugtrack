@@ -48,10 +48,11 @@ def view_project(project_name="",id=""):
     if project_name != "": # returns a list of [string, tuple, tuple]
         project_id = str(db.exec_cmd(nbt_global.def_dbname, 'select rowid from projects where shortname=?',(project_name,))[0][0]) # has to be a tuple
         project_description = str(db.exec_cmd(nbt_global.def_dbname, 'select description from projects where rowid=?',(project_id,))[0][0])
-        return [[project_description, get_bugs(project_id), get_wiki(project_id)], "view_project"]
+        return [[project_name, project_description, get_bugs(project_id), get_wiki(project_id)], "view_project"]
     elif id != "":
+        project_name = str(db.exec_cmd(nbt_global.def_dbname, 'select shortname from projects where rowid=?',(id,))[0][0])
         project_description = str(db.exec_cmd(nbt_global.def_dbname, 'select description from projects where rowid=?',(id,))[0][0])
-        return [[project_description, get_bugs(id), get_wiki(id)], "view_project"]
+        return [[project_name, project_description, get_bugs(id), get_wiki(id)], "view_project"]
     else:
         nbt_global.DEBUG('view_project','either project_name or id needs to be present',err_chr='!!')
         exit()

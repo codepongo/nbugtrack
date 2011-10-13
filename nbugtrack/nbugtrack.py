@@ -2,6 +2,7 @@
 
 import sys
 import os
+
 import router
 import project
 import urllib
@@ -15,8 +16,7 @@ def nbugtrack(environ, start_response):
     path = environ['PATH_INFO'];
     method = environ['REQUEST_METHOD']
 
-    if method == 'GET':
-        
+    if method == 'GET':        
         if environ["QUERY_STRING"] != '':
             query = path+"?"+urllib.unquote(environ["QUERY_STRING"])
         else:
@@ -33,30 +33,37 @@ def nbugtrack(environ, start_response):
         return [response]
     
     elif method == 'POST':
-        if path.startswith('/update_wiki'):
-            try:
-                request_len = int(environ['CONTENT_LENGTH'])
-                request_body = environ['wsgi.input'].read(request_len)
-                param_table = parse_post_request(request_body)
+        response_body = ""
+        try:
+            request_len = int(environ['CONTENT_LENGTH'])
+            request_body = environ['wsgi.input'].read(request_len)
+            param_table = parse_post_request(request_body)
+                
+            if path.startswith('/update_project'):
+                response_body = view.showView(project.update_project(param_table['id'], param_table['desc']))
+            elif path.startswith('/update_bug'):
+                response_body = view.showView(project.update_bug(param_table['id'], param_table['params']))
+            elif path.startswith('/update_wiki'):
                 response_body = view.showView(project.update_wiki(param_table['id'], param_table['content']))
-                print(response_body)
+            else:
+                response_body = "No Content"
+        except:
+            response_body = "error"
+        
+        status = '200 OK'
+        headers = [('Content-type', 'text/html'), 
+                  ('Content-length', str(len(response_body)))]
 
-                status = '200 OK'
-                headers = [('Content-type', 'text/html'), 
-                           ('Content-length', str(len(response_body)))]
-
-                start_response(status, headers)
-                return [response_body]
-            except:
-                response_body = "error"
-
-# regexes are great when you want
+        start_response(status, headers)
+        return [response_body]
+            
+# parse a post request
 def parse_post_request(request_body):
     request_tokens = request_body.split('\r\n') # sends CR LF
     var_alist = {}
 
     # remove unwanted chars
-    for i in request_tokens:
+    for i in request_tokens: # regexes are great when you want
         if re.compile('^([-]+)([\w]*)([-]*)').search(i):
             request_tokens.remove(i)
         if i == "":
