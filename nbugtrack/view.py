@@ -80,7 +80,7 @@ def show_bugs(content):
     
     for bugs_data in content:
         bugid,name,bug_description,priority,status = (str(i) for i in bugs_data)
-        bugs_html += '''<tr><td><a href="bug/?id='''+bugid+'''">'''+bugid+'''</a></td>'''+'''<td><a href="bug/?id='''+bugid+'''">'''+name+'''</a></td>'''+'''<td><a href="bug/?id='''+bugid+'''">'''+priority+'''</a></td>'''+'''<td><a href="bug/?id='''+bugid+'''">'''+status+'''</a></td></tr>'''
+        bugs_html += '''<tr><td><a href="bug/?id='''+bugid+'''">'''+bugid+'''</a></td>'''+'''<td><a href="bug/?id='''+bugid+'''">'''+name[:nbt_global.def_shortchars]+('...' if len(name) > nbt_global.def_shortchars else '')+'''</a></td>'''+'''<td><a href="bug/?id='''+bugid+'''">'''+priority+'''</a></td>'''+'''<td><a href="bug/?id='''+bugid+'''">'''+status+'''</a></td></tr>'''
         
     bugs_html += '''</table></div>'''
     return bugs_html
@@ -94,7 +94,7 @@ def show_wiki(content):
     for wiki_data in content:
         wikiid,name,content = (str(i) for i in wiki_data)
 
-        wiki_html += '''<tr><td><a href="wiki/?id='''+wikiid+'''">'''+wikiid+'''</a></td>'''+'''<td><a href="wiki/?id='''+wikiid+'''">'''+name+'''</a></td></tr>'''
+        wiki_html += '''<tr><td><a href="wiki/?id='''+wikiid+'''">'''+wikiid+'''</a></td>'''+'''<td><a href="wiki/?id='''+wikiid+'''">'''+name[:nbt_global.def_shortchars]+('...' if len(name) > nbt_global.def_shortchars else '')+'''</a></td></tr>'''
 
     wiki_html += '''</table></div>'''
     return wiki_html
