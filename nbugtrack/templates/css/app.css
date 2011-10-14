@@ -1,0 +1,80 @@
+
+@import url("/css/style.css")
+
+html {
+}
+
+a {
+    text-decoration: none;
+    color: #333;
+}
+
+a:visited {
+    color: #666;
+}
+
+a:hover {
+    background: #333;
+    color: #fff;
+}
+
+#container {
+    background: #fff;
+    padding: 1em;
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+header {
+    font-size: 2em;
+}
+
+#main {
+    background: #fff;
+}
+
+#proj_listing {
+    margin-top: 1em;
+    width: 500px;
+}
+
+#proj_data, #project_details_data {
+    padding: 0.5em;
+    margin-left: 2em;
+}
+
+#proj_data a {
+    display: block;
+}
+
+#proj_data a:hover {
+    color: #000;
+    background: none;
+}
+
+#proj_data .proj_name {   
+    font-size: 1.2em;
+}
+
+#proj_data .proj_desc, #project_description {
+    padding-left: 0.5em;
+    font-size: 1.1em;
+}
+
+td {
+    border: 0.5px solid #000;
+}
+
+td a{
+    display: block;
+}
+  
+th {
+    color: #fff;
+    background: #000
+}
+
+#bug_data {
+    padding: 1em;
+    margin: 1em;
+}
