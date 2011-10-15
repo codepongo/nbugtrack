@@ -21,7 +21,7 @@ This is:
 
 ## DEPS: ##
 
-Stock python, sqlite; Markdown module for the wiki can be installed like so:
+Stock python (tested with 2.7.1 and 3.2.1; YMMV with other versions), sqlite3; Markdown module for the wiki can be installed like so:
 
       [sudo] easy_install Markdown
 
@@ -34,4 +34,4 @@ If you don't install/need Markdown support, the wiki content will be interpreted
 * Configs, Preferences for categories, styles and all that jazz
 * A little command line tool (nbt) to post bugs
 * Authentication / Users (SSL)
-* Comments, Assignees, Email Floods :-P
+* Comments, Assignees, Duplicate Bugs, Email Floods :-P

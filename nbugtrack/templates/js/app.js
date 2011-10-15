@@ -1,5 +1,26 @@
 
-/* $(document).ready(function(){
-    $("#proj_listing #proj_data").filter(":odd").css("background-color","#eef");
+function send_request(request_string) {
+}
+
+function new_project() {
+    alert("Huh?");
+}
+
+function rename_project() {
+}
+
+function new_bug() {
+}
+    
+function new_wiki() {
+}
+
+function update_wiki() {
+}
+
+function update_bug() {
+}
+
+$(document).ready(function(){
+
 });
-*/

@@ -25,6 +25,7 @@ rtable = {
     '\/*js\/*([\w\-\.]+)$': 'send_file',
     '\/*css\/*([\w\-\.]+)$': 'send_file',
     '\/*img\/*([\w\-\.]+)$': 'send_file',
+    '\/*favicon.ico$': 'send_file'
 } # updates are done with POST
 
 # re.compile(lvalue).match(query) -> eval(rvalue)

@@ -11,13 +11,13 @@ except ImportError as e:
     nbt_global.DEBUG(str(e), "Markdown not available, expect wiki pages to have limited appeal :P" ,"!")
     markdown_available = False
 
-view_table = {
-    "projects": lambda(content): show_projects(content), # screwed up the naming
-    "view_project": lambda(content): view_this_project(content),
-    "bugs": lambda(content): show_bugs(content),
-    "wiki": lambda(content): show_wiki(content),
-    "view_bug": lambda(content): view_this_bug(content),
-    "view_wiki": lambda(content): view_this_wiki(content),
+view_table = { # screwed up the naming
+    "projects": lambda content: show_projects(content), 
+    "view_project": lambda content: view_this_project(content),
+    "bugs": lambda content: show_bugs(content),
+    "wiki": lambda content: show_wiki(content),
+    "view_bug": lambda content: view_this_bug(content),
+    "view_wiki": lambda content: view_this_wiki(content),
 }
 
 def get_template(template=nbt_global.def_template):
@@ -52,7 +52,7 @@ def show_projects(content):
         proj_html += '''<div class="proj_name"><a href="'''+name+'''/">'''+name+'''</a></div>''' #+'''<div class="proj_desc">'''+desc+'''</div>'''
         proj_html += '''</div></li>'''
     proj_html += '''</ol></div>'''
-    return default_template.replace("$page_body",proj_html).replace("$page_title","Projects")
+    return default_template.replace("$page_body",proj_html).replace("$page_title","nbugtrack: Projects").replace("$page_header",'Projects <a href="#" onclick="new_project()">+</a>')
 
 def view_this_project(content):
     ''' view the project description; bugs and wiki pages associated with it'''
@@ -62,10 +62,10 @@ def view_this_project(content):
     wiki_list = content[3]
     
     details_html = '''<div id="project_details_data">''' + '''<div id="project_description">''' + description + '''</div></div>'''
-    details_html += "<h2>Bugs</h2>"+show_bugs(bugs_list[0])
-    details_html += "<h2>Wiki</h2>"+show_wiki(wiki_list[0])
+    details_html += '<h2>Bugs <a href="#" onclick="new_bug()">+</a></h2>'+show_bugs(bugs_list[0])
+    details_html += '<h2>Wiki <a href="#" onclick="new_wiki()">+</a></h2>'+show_wiki(wiki_list[0])
 
-    return default_template.replace("$page_body",details_html).replace("$page_title","Project: "+name)
+    return default_template.replace("$page_body",details_html).replace("$page_header",'<a href="/">Project</a>: '+'<a href="#" onclick="rename_project()">'+name+'</a>').replace("$page_title",'Project: '+name)
 
 def show_bugs(content):
     ''' return a bugs table '''
@@ -75,7 +75,7 @@ def show_bugs(content):
     print(content)
     
     for bugs_data in content:
-        bugid,name,bug_description,priority,status = (str(i) for i in bugs_data)
+        bugid, projectid, name,bug_description,priority,status = (str(i) for i in bugs_data)
         bugs_html += '''<tr><td><a href="bug/?id='''+bugid+'''">'''+bugid+'''</a></td>'''+'''<td><a href="bug/?id='''+bugid+'''">'''+name[:nbt_global.def_shortchars]+('...' if len(name) > nbt_global.def_shortchars else '')+'''</a></td>'''+'''<td><a href="bug/?id='''+bugid+'''">'''+priority+'''</a></td>'''+'''<td><a href="bug/?id='''+bugid+'''">'''+status+'''</a></td></tr>'''
         
     bugs_html += '''</table></div>'''
@@ -88,7 +88,7 @@ def show_wiki(content):
     wiki_html += '''<tr><th>Page Id</th><th>Page Name</th></tr>'''
 
     for wiki_data in content:
-        wikiid,name,content = (str(i) for i in wiki_data)
+        wikiid, projectid, name, content = (str(i) for i in wiki_data)
 
         wiki_html += '''<tr><td><a href="wiki/?id='''+wikiid+'''">'''+wikiid+'''</a></td>'''+'''<td><a href="wiki/?id='''+wikiid+'''">'''+name[:nbt_global.def_shortchars]+('...' if len(name) > nbt_global.def_shortchars else '')+'''</a></td></tr>'''
 
@@ -96,7 +96,7 @@ def show_wiki(content):
     return wiki_html
 
 def view_this_bug(content):
-    bugid, name, desc, prio, stat = [str(i) for i in content[0]]
+    bugid, projectid, name, desc, prio, stat = [str(i) for i in content[0]]
 
     bug_html = '''<div id="bug_data">'''
     bug_html += '''<div id="bug_stat">Status: '''+stat+'''</div>'''
@@ -108,10 +108,10 @@ def view_this_bug(content):
         bug_html += '''<div id="bug_desc">Description <br />'''+str(desc)+'''</div>'''
 
     bug_html += "</div>"
-    return default_template.replace("$page_body",bug_html).replace("$page_title","Bug: "+name+" ("+bugid+")")
+    return default_template.replace("$page_body",bug_html).replace("$page_header",'<a href="../">Bug</a>: <a href="#" onclick="update_bug()">'+name+"</a> ("+bugid+")").replace("$page_title","Bug: "+name+" ("+bugid+")")
 
 def view_this_wiki(content):
-    pageid,pagename,pagecontent = [str(i) for i in content[0]]
+    pageid, projectid, pagename, pagecontent = [str(i) for i in content[0]]
 
     page_html = '''<div id="wiki_page">'''
 
@@ -121,5 +121,5 @@ def view_this_wiki(content):
         page_html += '''<div id="wiki_content">'''+str(pagecontent)+'''</div>'''
     page_html += '''</div>'''
 
-    return default_template.replace("$page_body",page_html).replace("$page_title","Wiki: "+pagename)
+    return default_template.replace("$page_body",page_html).replace("$page_header",'<a href="../">Wiki</a>: <a href="#" onclick="update_wiki()">'+pagename+"</a> ("+pageid+")").replace("$page_title","Wiki: "+pagename)
 

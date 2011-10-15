@@ -45,7 +45,7 @@ def delete_project(id):
 def view_project(project_name="",id=""):
     ''' view the project contents, bugs, wiki info.
     '''
-    if project_name != "": # returns a list of [string, tuple, tuple]
+    if project_name != "": 
         project_id = str(db.exec_cmd(nbt_global.def_dbname, 'select rowid from projects where shortname=?',(project_name,))[0][0]) # has to be a tuple
         project_description = str(db.exec_cmd(nbt_global.def_dbname, 'select description from projects where rowid=?',(project_id,))[0][0])
         return [[project_name, project_description, get_bugs(project_id), get_wiki(project_id)], "view_project"]
@@ -59,18 +59,18 @@ def view_project(project_name="",id=""):
 
 def get_bugs(projectid):
     ''' returns the bugs associated with this project '''
-    project_bugs = db.exec_cmd(nbt_global.def_dbname, 'select * from bugs where projectid=?', (projectid,))
+    project_bugs = db.exec_cmd(nbt_global.def_dbname, 'select rowid,* from bugs where projectid=?', (projectid,))
     return [project_bugs, "bugs"] 
 
 def get_wiki(projectid):
     ''' returns the wiki pages associated with this project '''
-    project_wiki = db.exec_cmd(nbt_global.def_dbname, 'select * from wiki where projectid=?', (projectid,))
+    project_wiki = db.exec_cmd(nbt_global.def_dbname, 'select rowid,* from wiki where projectid=?', (projectid,))
     return [project_wiki, "wiki"]
 
 def view_bug(project_name="", id=""):
     ''' displays the bug page'''
     if not id == "":
-        bug_descr = db.exec_cmd(nbt_global.def_dbname, 'select * from bugs where rowid=?',(id,))
+        bug_descr = db.exec_cmd(nbt_global.def_dbname, 'select rowid,* from bugs where rowid=?',(id,))
         return [bug_descr, "view_bug"]
     else:
         nbt_global.DEBUG('view_bug','id needs to be present',err_chr='!!')
@@ -90,7 +90,7 @@ def delete_bug(id):
 def view_wiki(project_name="", id=""):
     ''' displays the wiki page'''
     if not id == "":
-        wiki_descr = db.exec_cmd(nbt_global.def_dbname, 'select * from wiki where rowid=?',(id,))
+        wiki_descr = db.exec_cmd(nbt_global.def_dbname, 'select rowid,* from wiki where rowid=?',(id,))
         return [wiki_descr, "view_wiki"]
     else:
         nbt_global.DEBUG('view_bug','id needs to be present',err_chr='!!')
@@ -113,22 +113,32 @@ def rename_wiki(id, newname):
     return view_project(id=id)
 
 # XXX: check for '../../' type shit
-def send_file(filename):
+def send_file(filename = ""):
     ''' send any requested file'''
-    ext = os.path.splitext(filename)[1]
+    text_type = True
 
-    if ext == '.js':
-        folder_path="js"
-        mtype = "text/javascript"
-    elif ext == '.css':
-        folder_path="css"
-        mtype = "text/css"
-    elif ext == '.png' or ext == '.jgp':
-        folder_path="img"
-        mtype = "image/"+ext[1:]
-    full_name = "templates/"+folder_path+"/"+filename
+    if filename == "":
+        full_name = "templates/"+"favicon.ico"
+        mtype = "image/ico"
+    else:
+        ext = os.path.splitext(filename)[1]
+    
+        if ext == '.js':
+            folder_path="js"
+            mtype = "text/javascript"
+        elif ext == '.css':
+            folder_path="css"
+            mtype = "text/css"
+        elif ext == '.png' or ext == '.jgp':
+            text_type = False
+            folder_path="img"
+            mtype = "image/"+ext[1:]
+        full_name = "templates/"+folder_path+"/"+filename
 
     if os.path.exists(full_name):
-        return [open(full_name).read(),mtype]
+        if text_type:
+            return [open(full_name, encoding="utf-8").read(),mtype] if nbt_global.python_version == '3' else [open(full_name).read(),mtype]
+        else:
+            return [open(full_name, "rb").read(),mtype]
     else:
         return ['','none']

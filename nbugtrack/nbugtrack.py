@@ -2,11 +2,14 @@
 
 import sys
 import os
+import io
+import time
+import re
 
+import nbt_global
 import router
 import project
-import urllib
-import re
+import gzip
 import view
 
 from wsgiref.simple_server import make_server
@@ -18,7 +21,7 @@ def nbugtrack(environ, start_response):
 
     if method == 'GET':        
         if environ["QUERY_STRING"] != '':
-            query = path+"?"+urllib.unquote(environ["QUERY_STRING"])
+            query = path+"?"+environ["QUERY_STRING"]
         else:
             query = path
             
@@ -29,46 +32,84 @@ def nbugtrack(environ, start_response):
             content_type = "text/html"
             status = "200 OK"
             response = view.showView(response)
+            expires_by = time.strftime("%a, %d %b %Y %H:%M:%S %Z")
+            cache_policy = 'no-store, no-cache'
+            image_encoding = False
 
             if type(response) == list: # resource
                 content_type = response[1]
                 response = response[0]
+                expires_by = time.strftime("%a, %d %b %Y %H:%M:%S %Z", time.localtime(time.time() + 3600 * 24 * 30)) # expire a month from now
+                cache_policy = 'only-if-cached, max-age='+str(3600 * 24 * 30)
 
                 if content_type == 'none':
                     status = '404 Not Found'
+                elif content_type.startswith('image'):
+                    image_encoding = True
 
-            headers = [('Content-type', content_type), 
-                       ('Content-length', str(len(response)))]
+            # see: http://developer.yahoo.com/performance/rules.html
+            #      www.w3.org/Protocols/rfc2616/rfc2616-sec14.html
+            headers = [('Content-type', content_type),
+                       ('Content-encoding', 'gzip'),
+                       ('Content-length', str(len(response))),
+                       ('Cache-Control', cache_policy),
+                       ('Expires', expires_by)]
     
             start_response(status, headers)
-            return [response]
+
+            if nbt_global.python_version == '3':
+                if image_encoding == True:
+                    return [gzip.compress(bytes(response))]
+            
+            return [gzip.compress(bytes(response,"utf-8"))] if nbt_global.python_version == '3' else [compress(response)]  # gzip compression
         else:
             return ["error"]
     elif method == 'POST':
-        response_body = ""
+        response = ""
         try:
             request_len = int(environ['CONTENT_LENGTH'])
-            request_body = environ['wsgi.input'].read(request_len)
+            request = environ['wsgi.input'].read(request_len)
             param_table = parse_post_request(request_body)
                 
             if path.startswith('/update_project'):
-                response_body = view.showView(project.update_project(param_table['id'], param_table['desc']))
+                response = view.showView(project.update_project(param_table['id'], param_table['desc']))
             elif path.startswith('/update_bug'):
-                response_body = view.showView(project.update_bug(param_table['id'], param_table['params']))
+                response = view.showView(project.update_bug(param_table['id'], param_table['params']))
             elif path.startswith('/update_wiki'):
-                response_body = view.showView(project.update_wiki(param_table['id'], param_table['content']))
+                response = view.showView(project.update_wiki(param_table['id'], param_table['content']))
             else:
-                response_body = "No Content"
+                response = "No Content"
         except:
-            response_body = "error"
+            response = "error"
         
         status = '200 OK'
         headers = [('Content-type', 'text/html'), 
-                  ('Content-length', str(len(response_body)))]
+                  ('Content-length', str(len(response)))]
 
         start_response(status, headers)
-        return [response_body]
-            
+        return [gzip.compress(bytes(response, "utf-8"))] if sys.version[:1] == '3' else [compress(response)]  # gzip compression
+
+# gzip compression for strings was added from 3.0, the following
+# functions make it work with 2.x:
+#      http://bugs.python.org/file15282/gzip.py.svndiff
+def compress(data, compresslevel=9):
+    """ Compress data in one shot. Returns the compressed string.
+    Optional argument is the compression level, in range of 1-9. """
+    
+    bf = io.BytesIO(b'')
+    f = gzip.GzipFile(fileobj = bf, mode = 'wb', compresslevel = compresslevel)
+    f.write(data)
+    f.close()
+
+    return bf.getvalue()
+
+def decompress(data):
+    """ Decompress a gzip compressed string in one shot.
+    Returns the decompressed string. """
+
+    f = gzip.GzipFile(fileobj = io.BytesIO(data))
+    return f.read()    
+
 # parse a post request
 def parse_post_request(request_body):
     request_tokens = request_body.split('\r\n') # sends CR LF
