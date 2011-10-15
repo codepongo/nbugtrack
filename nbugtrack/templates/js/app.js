@@ -3,7 +3,7 @@ function send_request(request_string) {
 }
 
 function new_project() {
-    alert("Huh?");
+    
 }
 
 function rename_project() {

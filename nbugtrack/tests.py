@@ -5,7 +5,7 @@ import os
 import db
 import nbt_global
 
-dbname = "../tests/test.db"
+dbname = "test.db"
 
 def test_db():
 

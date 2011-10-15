@@ -9,19 +9,19 @@ Oh yeah, so yet another Bugzilla clone eh? Well, not so!
 This is:
 
 * Simple to Use and Setup
-* Includes a Wiki with Markdown formatting
+* Includes a Wiki
 * Great for Personal Projects (coz, there are no users ;)
-* No Bitching in the Comments Area (coz, there are no comments ;)
+* No bitching in the Comments Area (coz, there are no comments ;)
 
 ## HOW TO RUN: ##
 
-1. Extract the zip file.
+1. Download and Extract the zip file.
 2. `cd <extracted_folder>/nbugtrack`
 3. `python nbugtrack.py`
 
 ## DEPS: ##
 
-Stock python (tested with 2.7.1 and 3.2.1; YMMV with other versions), sqlite3; Markdown module for the wiki can be installed like so:
+Stock python (tested with CPython 2.7.1, 3.2.1, PyPy 1.6.0; YMMV with other versions), sqlite3; Markdown module for the wiki can be installed like so:
 
       [sudo] easy_install Markdown
 
@@ -31,7 +31,9 @@ If you don't install/need Markdown support, the wiki content will be interpreted
 
 * Add TARGET Planning (EXCEL type tables that many people love)
 * MySQL / Postgres Database Support
-* Configs, Preferences for categories, styles and all that jazz
-* A little command line tool (nbt) to post bugs
 * Authentication / Users (SSL)
 * Comments, Assignees, Duplicate Bugs, Email Floods :-P
+* Scalable web servers: nginx, mongrell2, ...
+* Configs, Preferences for categories, styles and all that jazz
+* A little command line tool (nbt) to post bugs
+

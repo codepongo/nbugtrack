@@ -148,6 +148,7 @@ if __name__ == '__main__':
     try:
         if len(sys.argv) == 2:
             port_to_run = argv[1]
+        print("Open http://localhost:"+str(port_to_run)+" in your browser...")
         httpd = make_server('', port_to_run, nbugtrack)
         httpd.serve_forever()
     except KeyboardInterrupt:
