@@ -5,6 +5,7 @@ import os
 import io
 import time
 import re
+import urllib
 
 import nbt_global
 import router
@@ -18,10 +19,13 @@ from wsgiref.util import *
 def nbugtrack(environ, start_response):
     path = environ['PATH_INFO'];
     method = environ['REQUEST_METHOD']
+    content_type = environ['CONTENT_TYPE']
 
     if method == 'GET':        
         if environ["QUERY_STRING"] != '':
-            query = path+"?"+environ["QUERY_STRING"]
+            qs = environ["QUERY_STRING"]
+            qs = urllib.parse.unquote_plus(qs) if nbt_global.python_version == '3' else urllib.unquote_plus(qs)
+            query = path+"?"+qs
         else:
             query = path
             
@@ -62,21 +66,37 @@ def nbugtrack(environ, start_response):
                     return [gzip.compress(bytes(response))]
             
             return [gzip.compress(bytes(response,"utf-8"))] if nbt_global.python_version == '3' else [compress(response)]  # gzip compression
-        else:
-            return ["error"]
+
+        elif response == None:
+            headers = [('Content-type', 'text/plain')]
+            status = '200 OK'
+            start_response(status, headers)
+            return [b"error"]
+
     elif method == 'POST':
+        if content_type == 'application/x-www-form-urlencoded':
+            parse_fn = parse_form_urlencoded_request
+        elif content_type == 'multipart/form-data':
+            parse_fn = parse_multipart_formdata_request
+
         response = ""
         try:
             request_len = int(environ['CONTENT_LENGTH'])
             request = environ['wsgi.input'].read(request_len)
-            param_table = parse_post_request(request_body)
-                
+            param_table = parse_fn(request)
+
             if path.startswith('/update_project'):
-                response = view.showView(project.update_project(param_table['id'], param_table['desc']))
+                response = view.showView(project.update_project(param_table['name'], param_table['desc']))
             elif path.startswith('/update_bug'):
                 response = view.showView(project.update_bug(param_table['id'], param_table['params']))
             elif path.startswith('/update_wiki'):
                 response = view.showView(project.update_wiki(param_table['id'], param_table['content']))
+            elif path.startswith('/new_project'):
+                response = view.showView(project.new_project(param_table['name'], param_table['desc']))
+            elif path.startswith('/rename_project'):
+                response = view.showView(project.rename_project(param_table['oldname'], param_table['newname']))
+            elif path.startswith('/rename_wiki'):
+                pass
             else:
                 response = "No Content"
         except:
@@ -110,13 +130,24 @@ def decompress(data):
     f = gzip.GzipFile(fileobj = io.BytesIO(data))
     return f.read()    
 
-# parse a post request
-def parse_post_request(request_body):
+# parse a xxx-url-form-encoded request
+def parse_form_urlencoded_request(request_body):
+    var_alist = {}
+    request_body = str(request_body, 'utf-8') if nbt_global.python_version == '3' else str(request_body)
+    for i in request_body.split('&'):
+        if i != "":
+            nv = i.split('=')
+            var_alist[nv[0]] = urllib.parse.unquote_plus(nv[1]) if nbt_global.python_version == '3' else urllib.unquote_plus(nv[1])
+    print(var_alist)
+    return var_alist
+
+# parse a multipart/form-data post request
+def parse_multipart_formdata_request(request_body):
     request_tokens = request_body.split('\r\n') # sends CR LF
     var_alist = {}
 
     # remove unwanted chars
-    for i in request_tokens: # regexes are great when you want
+    for i in request_tokens:
         if re.compile('^([-]+)([\w]*)([-]*)').search(i):
             request_tokens.remove(i)
         if i == "":
@@ -131,7 +162,6 @@ def parse_post_request(request_body):
             request_tokens[index]  = ' '.join(i for i in list(tmpname.groups()))
         index = index + 1
 
-    # but regexes need not be used everywhere
     while(len(request_tokens) != 0):
         try:
             name = request_tokens.pop(0)

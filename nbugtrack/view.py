@@ -61,18 +61,17 @@ def view_this_project(content):
     bugs_list = content[2]
     wiki_list = content[3]
     
-    details_html = '''<div id="project_details_data">''' + '''<div id="project_description">''' + description + '''</div></div>'''
+    details_html = '''<div id="project_details_data">''' + '''<div id="project_description">''' + '<a id="update_trigger" href="#" onclick="update_project()">'+description +'</a>'+ '''</div></div>'''
     details_html += '<h2>Bugs <a href="#" onclick="new_bug()">+</a></h2>'+show_bugs(bugs_list[0])
     details_html += '<h2>Wiki <a href="#" onclick="new_wiki()">+</a></h2>'+show_wiki(wiki_list[0])
-
-    return default_template.replace("$page_body",details_html).replace("$page_header",'<a href="/">Project</a>: '+'<a href="#" onclick="rename_project()">'+name+'</a>').replace("$page_title",'Project: '+name)
+    details_html += '<br /><a id="delete_trigger" href="#" onclick="delete_project()">'+'Delete this project'+'</a>' 
+    return default_template.replace("$page_body",details_html).replace("$page_header",'<a href="/">Project</a>: '+'<a id="rename_trigger" href="#" onclick="rename_project()">'+name+'</a>').replace("$page_title",'Project: '+name)
 
 def show_bugs(content):
     ''' return a bugs table '''
     bugs_html = '''<div id="bugs_data">
                    <table class="list_bugs">'''
     bugs_html += '''<tr><th>Bug Id</th><th>Short Name</th><th>Priority</th><th>Status</th></tr>'''
-    print(content)
     
     for bugs_data in content:
         bugid, projectid, name,bug_description,priority,status = (str(i) for i in bugs_data)

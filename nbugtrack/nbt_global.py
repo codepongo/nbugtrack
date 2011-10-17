@@ -14,8 +14,7 @@ python_version = sys.version[:1]
 def DEBUG(exception, info="", err_chr="D"):
     ''' prints a nice debug log '''
 
-    print(2*err_chr),
-    print(': '+exception)
+    print(2*err_chr+': '+exception)
     
     if info != "":
         print("\n\t"+info)

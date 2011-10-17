@@ -16,30 +16,34 @@ def list_projects():
     ''' if db file is not there call init_db()'''
     if not os.path.exists(nbt_global.def_dbname):
         init_db()
-    else:
-        proj_list = db.exec_cmd(nbt_global.def_dbname, 'select * from projects')
-        return [proj_list,"projects"]
+
+    proj_list = db.exec_cmd(nbt_global.def_dbname, 'select * from projects')
+    return [proj_list,"projects"]
 
 def new_project(name, desc):
     ''' add a new project to the projects table'''
-    db.exec_cmd(nbt_global.def_dbname, 'insert into projects values(name,desc)')
+    db.exec_cmd(nbt_global.def_dbname, 'insert into projects values(?,?)',(name,desc))
     return list_projects()
 
-def rename_project(id, newname):
+def rename_project(oldname, newname):
     ''' rename the project '''
-    db.exec_cmd(nbt_global.def_dbname,'update projects set shortname=? where rowid=?',(newname, id))
-    return list_projects()
+    project_id = str(db.exec_cmd(nbt_global.def_dbname, 'select rowid from projects where shortname=?',(oldname,))[0][0]) # has to be a tuple
+    db.exec_cmd(nbt_global.def_dbname,'update projects set shortname=? where rowid=?',(newname, project_id))
+   
+    return view_project(id=project_id)
 
-def update_project(id, desc):
+def update_project(name, desc):
     ''' update the project description '''
-    db.exec_cmd(nbt_global.def_dbname,'update projects set description=? where rowid=?',(desc, id))
+    db.exec_cmd(nbt_global.def_dbname,'update projects set description=? where shortname=?',(desc, name))
     return view_project(id=id)
 
-def delete_project(id):
+def delete_project(name):
     ''' delete the project, associated wiki pages and bugs'''
-    db.exec_cmd(nbt_global.def_dbname,'delete from wiki where projectid=?',(id))
-    db.exec_cmd(nbt_global.def_dbname,'delete from bugs where projectid=?',(id))
-    db.exec_cmd(nbt_global.def_dbname,'delete from projects where rowid=?',(id))
+    project_id = str(db.exec_cmd(nbt_global.def_dbname, 'select rowid from projects where shortname=?',(name,))[0][0]) # has to be a tuple
+    print(project_id)
+    db.exec_cmd(nbt_global.def_dbname,'delete from wiki where projectid=?',(project_id))
+    db.exec_cmd(nbt_global.def_dbname,'delete from bugs where projectid=?',(project_id))
+    db.exec_cmd(nbt_global.def_dbname,'delete from projects where rowid=?',(project_id))
     return list_projects()
 
 def view_project(project_name="",id=""):
