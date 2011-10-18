@@ -80,17 +80,6 @@ def view_bug(project_name="", id=""):
         nbt_global.DEBUG('view_bug','id needs to be present',err_chr='!!')
         exit()
 
-def update_bug(id, params):
-    ''' update the bug'''
-    projectid,shortname,description,priority,status = params.split(',')
-    db.exec_cmd(nbt_global.def_dbname, 'update bugs set projectid=?, shortname=?, description=?, priority=?, status=? where rowid=?', (projectid, shortname, description, priority, status, id,))
-    return view_bug(id=id)
-
-def delete_bug(id):
-    ''' delete the bug'''
-    project_id = str(db.exec_cmd(nbt_global.def_dbname, 'select projectid from wiki where rowid=?', (id,))[0][0])
-    return view_project(id=projectid)
-
 def view_wiki(project_name="", id=""):
     ''' displays the wiki page'''
     if not id == "":
@@ -100,23 +89,55 @@ def view_wiki(project_name="", id=""):
         nbt_global.DEBUG('view_bug','id needs to be present',err_chr='!!')
         exit()
 
-def update_wiki(id, content):
-    ''' updates the wiki page'''
-    db.exec_cmd(nbt_global.def_dbname, 'update wiki set content=? where rowid=?', (content, id,))
-    return view_wiki(id=id)
+def new_bug(project_name, shortname):
+    ''' create a new bug'''
+    print(project_name)
+    print(shortname)
+    project_id = str(db.exec_cmd(nbt_global.def_dbname, 'select rowid from projects where shortname=?',(project_name,))[0][0]) # has to be a tuple
+    db.exec_cmd(nbt_global.def_dbname, 'insert into bugs values(?,?,?,?,?)', (project_id,shortname,"Please add a detailed description of your bug. \n\nEvery useful bug report says three things: \n\n * Steps to Reproduce \n\n * What you expected to see \n\n * What you saw instead\n\n","Medium","Medium"))
+    return view_project(id=project_id)
+    
+def new_wiki(project_name, name, content):
+    ''' create a new wiki'''
+    project_id = str(db.exec_cmd(nbt_global.def_dbname, 'select rowid from projects where shortname=?',(project_name,))[0][0]) # has to be a tuple
+    db.exec_cmd(nbt_global.def_dbname, 'insert into wiki values(?,?,?)',(project_id,name,content))
+    return view_project(id=project_id)
+
+def delete_bug(id):
+    ''' delete the bug'''
+    project_id = str(db.exec_cmd(nbt_global.def_dbname, 'select projectid from bugs where rowid=?', (id,))[0][0])
+    db.exec_cmd(nbt_global.def_dbname, 'delete from bugs where rowid=?', (id))
+    return view_project(id=project_id)
 
 def delete_wiki(id):
+    ''' delete the wiki'''
+    project_id = str(db.exec_cmd(nbt_global.def_dbname, 'select projectid from wiki where rowid=?', (id,))[0][0])
+    db.exec_cmd(nbt_global.def_dbname, 'delete from wiki where rowid=?', (id))
+    return view_project(id=project_id)
+
+def update_bug(id, *params): # XXX
+    ''' update the bug'''
+    project_id,shortname,description,priority,status = params
+    db.exec_cmd(nbt_global.def_dbname, 'update bugs set projectid=?, shortname=?, description=?, priority=?, status=? where rowid=?', (project_id, shortname, description, priority, status, id,))
+    return view_bug(id=id)
+
+def update_wiki(id, content): # XXX
     ''' deletes the wiki page'''
     project_id = str(db.exec_cmd(nbt_global.def_dbname, 'select projectid from wiki where rowid=?', (id,))[0][0])
     db.exec_cmd(nbt_global.def_dbname, 'update wiki set content=? where rowid=?', (content, id))
-    return view_project(id=projectid)
+    return view_wiki(id=id)
 
-def rename_wiki(id, newname):
+def rename_wiki(id, newname): # XXX
     ''' renames the wiki page to given name'''
     db.exec_cmd(nbt_global.def_dbname,'update wiki set shortname=? where rowid=?',(newname, id))
     return view_project(id=id)
 
-# XXX: check for '../../' type shit
+def send_wtext(id):
+    ''' send wiki plain text'''
+    existing_content = db.exec_cmd(nbt_global.def_dbname,'select content from wiki where rowid=?',(id,))[0][0]
+    print("DEBUG: XHR:"+existing_content)
+    return [existing_content, "text/html"]
+
 def send_file(filename = ""):
     ''' send any requested file'''
     text_type = True

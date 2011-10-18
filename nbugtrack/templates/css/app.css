@@ -77,3 +77,13 @@ th {
     padding: 1em;
     margin: 1em;
 }
+
+#bug_desc {
+    margin-top: 1em;
+    margin-left: 1em;
+}
+
+#wiki_content {
+    margin-top: 1em;
+    margin-left: 1em;
+}

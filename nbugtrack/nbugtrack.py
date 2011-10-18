@@ -43,14 +43,17 @@ def nbugtrack(environ, start_response):
             if type(response) == list: # resource
                 content_type = response[1]
                 response = response[0]
-                expires_by = time.strftime("%a, %d %b %Y %H:%M:%S %Z", time.localtime(time.time() + 3600 * 24 * 30)) # expire a month from now
-                cache_policy = 'only-if-cached, max-age='+str(3600 * 24 * 30)
 
+                expires_by = time.strftime("%a, %d %b %Y %H:%M:%S %Z", time.localtime(time.time() + 3600 * 24 * 30)) # expire a month from now
+                cache_policy = 'max-age='+str(3600 * 24 * 30)
+				
                 if content_type == 'none':
                     status = '404 Not Found'
                 elif content_type.startswith('image'):
                     image_encoding = True
-
+                elif content_type == 'text/html':
+					cache_policy = 'no-store, no-cache'
+					
             # see: http://developer.yahoo.com/performance/rules.html
             #      www.w3.org/Protocols/rfc2616/rfc2616-sec14.html
             headers = [('Content-type', content_type),
@@ -81,32 +84,48 @@ def nbugtrack(environ, start_response):
 
         response = ""
         try:
+            response_is_list = False
             request_len = int(environ['CONTENT_LENGTH'])
             request = environ['wsgi.input'].read(request_len)
             param_table = parse_fn(request)
 
+            # XXX: I should put another dispatch table for post requests in router
             if path.startswith('/update_project'):
                 response = view.showView(project.update_project(param_table['name'], param_table['desc']))
-            elif path.startswith('/update_bug'):
-                response = view.showView(project.update_bug(param_table['id'], param_table['params']))
-            elif path.startswith('/update_wiki'):
-                response = view.showView(project.update_wiki(param_table['id'], param_table['content']))
             elif path.startswith('/new_project'):
                 response = view.showView(project.new_project(param_table['name'], param_table['desc']))
             elif path.startswith('/rename_project'):
                 response = view.showView(project.rename_project(param_table['oldname'], param_table['newname']))
             elif path.startswith('/rename_wiki'):
-                pass
+                response = view.showView(project.rename_wiki(param_table['wiki_id'], param_table['newname']))
+            elif path.startswith('/new_wiki'):
+                response = view.showView(project.new_wiki(param_table['project_name'],param_table['name'], param_table['content']))
+            elif path.startswith('/new_bug'):
+                response = view.showView(project.new_bug(param_table['project_name'],param_table['shortname']))
+            elif path.startswith('/update_bug'):
+                response = view.showView(project.update_bug(param_table['id'], param_table['params']))
+            elif path.startswith('/update_wiki'):
+                response = view.showView(project.update_wiki(param_table['id'], param_table['content']))
+            elif path.startswith('/send_wtext'):
+                response = view.showView(project.send_wtext(param_table['id']))
+                response_is_list = True
             else:
                 response = "No Content"
         except:
-            response = "error"
-        
+            response = "error" 
+
+        if response_is_list: # for the jquery response
+            response =  str(response[0])
+       
         status = '200 OK'
         headers = [('Content-type', 'text/html'), 
                   ('Content-length', str(len(response)))]
 
         start_response(status, headers)
+        
+        if response_is_list:            
+            return [response]
+        
         return [gzip.compress(bytes(response, "utf-8"))] if sys.version[:1] == '3' else [compress(response)]  # gzip compression
 
 # gzip compression for strings was added from 3.0, the following
