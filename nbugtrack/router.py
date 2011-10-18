@@ -8,10 +8,10 @@ from nbt_global import DEBUG
 # expressions." Now they have two problems.  --jwz (http://www.jwz.org/hacks/gdb-highlight.el)
 rtable = {
     '\/*$': 'list_projects',
-    '\/([\w\s%]+)\/*$': 'view_project',
+    '\/([\w\s\.%]+)\/*$': 'view_project',
     '\/([\w\s%]+)\/+bug\/*\?id=(\w+)$': 'view_bug',
     '\/([\w\s%]+)\/+wiki\/*\?id=(\w+)$': 'view_wiki',
-    '\/delete_project\/*\?name=([\w\s%]+)$': 'delete_project',
+    '\/delete_project\/*\?name=([\w\s\.%]+)$': 'delete_project',
     '\/delete_bug\/*\?id=(\w+)$': 'delete_bug',
     '\/delete_wiki\/*\?id=(\w+)$': 'delete_wiki',
     '\/send_wtext\/*\?id=(\w+)$': 'send_wtext',

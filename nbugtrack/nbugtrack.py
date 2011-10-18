@@ -93,6 +93,7 @@ def nbugtrack(environ, start_response):
             if path.startswith('/update_project'):
                 response = view.showView(project.update_project(param_table['name'], param_table['desc']))
             elif path.startswith('/new_project'):
+                print(param_table['name'] + " "+ param_table['desc'])
                 response = view.showView(project.new_project(param_table['name'], param_table['desc']))
             elif path.startswith('/rename_project'):
                 response = view.showView(project.rename_project(param_table['oldname'], param_table['newname']))

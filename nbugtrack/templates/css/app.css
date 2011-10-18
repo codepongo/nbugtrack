@@ -1,13 +1,21 @@
 
 @import url("/css/style.css")
 
+html {
+    font-family: "Helvetica", "Calibri", sans-serif !important;
+}
+
 body {
-    font-family: sans-serif;
+    font-family: "Helvetica", "Calibri", sans-serif !important;
+}
+
+#container {
+    font-family: "Helvetica", "Calibri", sans-serif !important;
 }
 
 a {
-    text-decoration: none;
-    color: #333;
+    text-decoration: none !important;
+    color: #333 !important;
 }
 
 a:visited {

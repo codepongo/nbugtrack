@@ -7,6 +7,9 @@ import sqlite3
 
 def exec_cmd(dbname, cmd_string, qualifier=""):
     ''' execute the command on the database '''
+    print(cmd_string)
+    print(qualifier)
+
     try:
         conn = sqlite3.connect(dbname)
         cur = conn.cursor()
@@ -24,8 +27,6 @@ def exec_cmd(dbname, cmd_string, qualifier=""):
                 return query_result
         else:
             nbt_global.DEBUG("exec_cmd: ",cmd_string,"!")
-            exit()
     except Exception as e:
         nbt_global.DEBUG("exec_cmd: "+str(e),cmd_string,"!")
-        exit()
 

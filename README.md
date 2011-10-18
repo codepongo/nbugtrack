@@ -18,6 +18,7 @@ This is:
 1. Download and Extract the zip file.
 2. `cd <extracted_folder>/nbugtrack`
 3. `python nbugtrack.py`
+4. Open the URL in your browser.
 
 ## DEPS: ##
 
@@ -26,6 +27,15 @@ Stock python (tested with CPython 2.7.1, 3.2.1, PyPy 1.6.0; YMMV with other vers
       [sudo] easy_install Markdown
 
 If you don't install/need Markdown support, the wiki content will be interpreted as plain text. But of-course, Markdown is recommended.
+
+## Browser Support: ##
+
+Tested with:
+
+* IE 8+ (Some view related bugs in IE 6/7)
+* Opera (11.51) 
+* Safari (5)
+* jQuery callback related bugs in Firefox, Chrome
    
 ## FUTURE PLANS: (Ordered by Priority) ##
 

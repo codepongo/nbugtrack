@@ -26,11 +26,11 @@ function saveProjectChanges() {
     
     if(new_proj_name != "") {
 	if(new_proj_desc != "") {
-    already_open = false;
-    $.post("/new_project", {name: new_proj_name, desc: new_proj_desc}, 
-	   function() {
-	       window.location.reload();
-	   });
+	    already_open = false;
+	    $.post("/new_project", {name: new_proj_name, desc: new_proj_desc}, 
+		   function() {
+		       window.location.reload();
+		   });
 	}
 	else {
 	    $("#project_description").css('border','1px solid red');
@@ -61,7 +61,7 @@ function rename_project() {
 
 function saveRenameChanges() {
     var new_proj_name = document.getElementById("rename_input").value;
-    var existing_name = $("#rename_trigger").text().trim();
+    var existing_name = $.trim($("#rename_trigger").text());
 
     if(new_proj_name != "") {
 	already_open = false;
@@ -95,7 +95,7 @@ function update_project() {
 
 function saveUpdateChanges() {
     var new_proj_desc = document.getElementById("update_input").value;
-    var existing_name = $("#rename_trigger").text().trim();
+    var existing_name = $.trim($("#rename_trigger").text());
 
     if(new_proj_desc != "") {
 	already_open = false;
@@ -111,8 +111,8 @@ function saveUpdateChanges() {
 function delete_project() {
     delete_it =  confirm("Delete: Sure? I'm not kidding!\nAll the bugs, wiki with that project will be gone too!");
     
-    if(delete_it) {
-	$.get("/delete_project?name="+$("#rename_trigger").text().trim(), 
+    if(delete_it) { /* trim() is not supported in IE 8 !!*/
+	$.get("/delete_project?name=" + $.trim($("#rename_trigger").text()), 
 	      function(data) {
 		  window.location.href = "../";
 	      });
@@ -206,7 +206,7 @@ function rename_wiki() {
 
 function saveWikiRenameChanges() {
     var new_wiki_name = document.getElementById("rename_input").value;
-    var existing_name = $("#rename_trigger").text().trim();
+    var existing_name = $.trim($("#rename_trigger").text());
 
     if(new_wiki_name != "") {
 	already_open = false;
@@ -223,7 +223,7 @@ function update_wiki() {
     already_open = true;
     var existing_content =  $('#wiki_content').html();
     var inplace_text = ""
-    $.post("/send_wtext", {id: $('#pageid').text().trim()}, 
+    $.post("/send_wtext", {id: $.trim($('#pageid').text())}, 
 	  function(data) {
 	      inplace_text = data;
 	      $('#wiki_input').html(inplace_text);
@@ -262,7 +262,7 @@ function delete_bug() {
     delete_it =  confirm("Delete: Sure? All content with this bug will be gone!");
     
     if(delete_it) {
-	$.get("/delete_bug?id="+$("#bugid").text().trim(), 
+	$.get("/delete_bug?id="+$.trim($("#bugid").text()), 
 	      function(data) {
 		  window.location.href = "../";
 	      });
@@ -273,7 +273,7 @@ function delete_wiki() {
     delete_it =  confirm("Delete: Sure? All content with this wiki will be gone!");
     
     if(delete_it) {
-	$.get("/delete_wiki?id="+$("#pageid").text().trim(), 
+	$.get("/delete_wiki?id="+$.trim($("#pageid").text()), 
 	      function(data) {
 		  	window.location.href = "../";
 	      });

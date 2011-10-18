@@ -22,6 +22,7 @@ def list_projects():
 
 def new_project(name, desc):
     ''' add a new project to the projects table'''
+    print("i'm called"+name+desc)
     db.exec_cmd(nbt_global.def_dbname, 'insert into projects values(?,?)',(name,desc))
     return list_projects()
 
@@ -106,13 +107,13 @@ def new_wiki(project_name, name, content):
 def delete_bug(id):
     ''' delete the bug'''
     project_id = str(db.exec_cmd(nbt_global.def_dbname, 'select projectid from bugs where rowid=?', (id,))[0][0])
-    db.exec_cmd(nbt_global.def_dbname, 'delete from bugs where rowid=?', (id))
+    db.exec_cmd(nbt_global.def_dbname, 'delete from bugs where rowid=?', (id,))
     return view_project(id=project_id)
 
 def delete_wiki(id):
     ''' delete the wiki'''
     project_id = str(db.exec_cmd(nbt_global.def_dbname, 'select projectid from wiki where rowid=?', (id,))[0][0])
-    db.exec_cmd(nbt_global.def_dbname, 'delete from wiki where rowid=?', (id))
+    db.exec_cmd(nbt_global.def_dbname, 'delete from wiki where rowid=?', (id,))
     return view_project(id=project_id)
 
 def update_bug(id, *params): # XXX
