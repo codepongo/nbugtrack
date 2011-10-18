@@ -79,16 +79,20 @@ def nbugtrack(environ, start_response):
     elif method == 'POST':
         if content_type == 'application/x-www-form-urlencoded':
             parse_fn = parse_form_urlencoded_request
+        elif content_type == 'application/x-www-form-urlencoded; charset=UTF-8':
+            parse_fn = parse_form_urlencoded_request
         elif content_type == 'multipart/form-data':
             parse_fn = parse_multipart_formdata_request
 
         response = ""
         try:
+            expires_by = time.strftime("%a, %d %b %Y %H:%M:%S %Z")
+            cache_policy = 'no-store, no-cache'
+            content_enc = 'gzip'
             response_is_list = False
             request_len = int(environ['CONTENT_LENGTH'])
             request = environ['wsgi.input'].read(request_len)
             param_table = parse_fn(request)
-
             # XXX: I should put another dispatch table for post requests in router
             if path.startswith('/update_project'):
                 response = view.showView(project.update_project(param_table['name'], param_table['desc']))
@@ -110,9 +114,11 @@ def nbugtrack(environ, start_response):
             elif path.startswith('/send_wtext'):
                 response = view.showView(project.send_wtext(param_table['id']))
                 response_is_list = True
+                content_enc = 'text'
             else:
                 response = "No Content"
-        except:
+        except Exception as e:
+            print(str(e))
             response = "error" 
 
         if response_is_list: # for the jquery response
@@ -120,7 +126,10 @@ def nbugtrack(environ, start_response):
        
         status = '200 OK'
         headers = [('Content-type', 'text/html'), 
-                  ('Content-length', str(len(response)))]
+                   ('Content-length', str(len(response))),
+                   ('Content-encoding', content_enc),
+                   ('Cache-Control', cache_policy),
+                   ('Expires', expires_by)]
 
         start_response(status, headers)
         

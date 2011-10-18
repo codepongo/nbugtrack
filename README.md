@@ -35,7 +35,8 @@ Tested with:
 * IE 8+ (Some view related bugs in IE 6/7)
 * Opera (11.51) 
 * Safari (5)
-* jQuery callback related bugs in Firefox, Chrome
+* Firefox (7)
+* jQuery callback bug in Chrome (doesn't exeute success callback)
    
 ## FUTURE PLANS: (Ordered by Priority) ##
 
