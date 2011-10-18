@@ -36,8 +36,8 @@ Tested with:
 * Opera (11.51) 
 * Safari (5)
 * Firefox (7)
-* jQuery callback bug in Chrome (doesn't exeute success callback)
-   
+* Chrome (32786 -- or whatever is the latest version ;)
+
 ## FUTURE PLANS: (Ordered by Priority) ##
 
 * Add TARGET Planning (EXCEL type tables that many people love)
