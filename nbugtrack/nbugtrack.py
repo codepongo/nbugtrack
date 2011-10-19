@@ -94,13 +94,26 @@ def nbugtrack(environ, start_response):
             request = environ['wsgi.input'].read(request_len)
             param_table = parse_fn(request)
             # XXX: I should put another dispatch table for post requests in router
+
+            invalid_chars = "[\#\$\@\!\^\&\*]+"
+
             if path.startswith('/update_project'):
                 response = view.showView(project.update_project(param_table['name'], param_table['desc']))
             elif path.startswith('/new_project'):
-                print(param_table['name'] + " "+ param_table['desc'])
-                response = view.showView(project.new_project(param_table['name'], param_table['desc']))
+                name = param_table['name']
+                
+                if re.compile(invalid_chars).search(name):
+                    response = "No Content"
+                else:
+                    response = view.showView(project.new_project(param_table['name'], param_table['desc']))
             elif path.startswith('/rename_project'):
-                response = view.showView(project.rename_project(param_table['oldname'], param_table['newname']))
+                oldname = param_table['oldname']
+                newname = param_table['newname']
+
+                if re.compile(invalid_chars).search(newname) or re.compile(invalid_chars).search(oldname):
+                    response = "No Content"
+                else:
+                    response = view.showView(project.rename_project(param_table['oldname'], param_table['newname']))
             elif path.startswith('/rename_wiki'):
                 response = view.showView(project.rename_wiki(param_table['wiki_id'], param_table['newname']))
             elif path.startswith('/new_wiki'):
