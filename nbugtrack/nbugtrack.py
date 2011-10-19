@@ -24,7 +24,7 @@ def nbugtrack(environ, start_response):
     if method == 'GET':        
         if environ["QUERY_STRING"] != '':
             qs = environ["QUERY_STRING"]
-            qs = urllib.parse.unquote_plus(qs) if nbt_global.python_version == '3' else urllib.unquote_plus(qs)
+            qs = urllib.parse.unquote(qs) if nbt_global.python_version == '3' else urllib.unquote(qs)
             query = path+"?"+qs
         else:
             query = path

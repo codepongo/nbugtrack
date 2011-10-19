@@ -1,6 +1,7 @@
 /* XXX: My JavaScript is pretty bad: gotta learn it properly.. :( */
 /* Much of the following code is pretty similar...*/
 already_open = false;
+invalid_chars = /[\#\$\@\!\^\&\*]+/;
 
 function new_project() {   
     if (!already_open) {
@@ -25,7 +26,7 @@ function saveProjectChanges() {
     var new_proj_name = document.getElementById("project_input").value;
     var new_proj_desc = document.getElementById("project_description").value;
     
-    if(new_proj_name != "") {
+    if(new_proj_name != "" && !new_proj_name.match(invalid_chars)) {
 	if(new_proj_desc != "") {
 	    already_open = false;
 	    $.post("/new_project", {name: new_proj_name, desc: new_proj_desc}, 
@@ -64,7 +65,7 @@ function saveRenameChanges() {
     var new_proj_name = document.getElementById("rename_input").value;
     var existing_name = $.trim($("#rename_trigger").text());
 
-    if(new_proj_name != "") {
+    if(new_proj_name != "" && !new_proj_name.match(invalid_chars)) {
 	already_open = false;
 	$.post("/rename_project", {oldname: existing_name, newname: new_proj_name}, 
 	   function() {
