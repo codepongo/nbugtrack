@@ -100,8 +100,8 @@ def view_this_bug(content):
     bugid, projectid, name, desc, prio, stat = [str(i) for i in content[0]]
 
     bug_html = '''<div id="bug_data">'''
-    bug_html += '''<div id="bug_stat">Status: '''+stat+'''</div>'''
-    bug_html += '''<div id="bug_prio">Priority: '''+prio+'''</div>'''
+    bug_html += '''Status: <div id="bug_stat">'''+stat+'''</div><br />'''
+    bug_html += '''Priority: <div id="bug_prio">'''+prio+'''</div>'''
     
     if markdown_available == True:
         bug_html += '''<br />Description: <div id="bug_desc">'''+str(markdown.markdown(desc))+'''</div>'''

@@ -7,6 +7,7 @@ from nbt_global import DEBUG
 # Some people, when confronted with a problem, think "I know, I'll use regular 
 # expressions." Now they have two problems.  --jwz (http://www.jwz.org/hacks/gdb-highlight.el)
 rtable = {
+######## all get requests #######################
     '\/*$': 'list_projects',
     '\/([\w\s\.%]+)\/*$': 'view_project',
     '\/([\w\s%]+)\/+bug\/*\?id=(\w+)$': 'view_bug',
@@ -14,13 +15,6 @@ rtable = {
     '\/delete_project\/*\?name=([\w\s\.%]+)$': 'delete_project',
     '\/delete_bug\/*\?id=(\w+)$': 'delete_bug',
     '\/delete_wiki\/*\?id=(\w+)$': 'delete_wiki',
-    '\/send_wtext\/*\?id=(\w+)$': 'send_wtext',
-#   '\/new_project\/*\?name=([\w\s%]+)&desc=([\w\s%]+)$': 'new_project',
-#   '\/rename_project\/*\?id=(\w+)&newname=([\w\s%]+)$': 'rename_project',
-#   '\/rename_wiki\/*\?id=(\w+)&name=([\w\s%]+)$': 'rename_wiki',
-#    '\/update_project\/*\?id=(\w+)&desc=([\w\s%]+)$': 'update_project',
-#    '\/update_bug\/*\?id=(\w+)&params=([\w\s,%]+)$': 'update_bug',
-#    '\/update_wiki\/*\?id=(\w+)&content=([\w\s%]+)$': 'update_wiki', 
 
 ######## any js,css,img resource files ##########
     '\/*js\/*([\w\-\.]+)$': 'send_file',

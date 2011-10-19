@@ -78,7 +78,14 @@ td a{
   
 th {
     color: #000;
-    background: #eef;
+    background: #c5c5c5;
+    font-size: 1.05em;
+    font-style: bold;
+    border: 1px solid #000;
+}
+
+td {
+    border: 0.5px dotted #000;
 }
 
 #bug_data {
@@ -86,7 +93,7 @@ th {
     margin: 1em;
 }
 
-#bug_desc {
+#bug_desc,#bug_stat,#bug_prio {
     margin-top: 1em;
     margin-left: 1em;
 }

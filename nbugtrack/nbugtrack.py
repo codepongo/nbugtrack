@@ -52,7 +52,7 @@ def nbugtrack(environ, start_response):
                 elif content_type.startswith('image'):
                     image_encoding = True
                 elif content_type == 'text/html':
-					cache_policy = 'no-store, no-cache'
+                    cache_policy = 'no-store, no-cache'
 					
             # see: http://developer.yahoo.com/performance/rules.html
             #      www.w3.org/Protocols/rfc2616/rfc2616-sec14.html
@@ -108,11 +108,15 @@ def nbugtrack(environ, start_response):
             elif path.startswith('/new_bug'):
                 response = view.showView(project.new_bug(param_table['project_name'],param_table['shortname']))
             elif path.startswith('/update_bug'):
-                response = view.showView(project.update_bug(param_table['id'], param_table['params']))
+                response = view.showView(project.update_bug(param_table['id'], [param_table['desc'], param_table['prio'], param_table['stat']]))
             elif path.startswith('/update_wiki'):
                 response = view.showView(project.update_wiki(param_table['id'], param_table['content']))
             elif path.startswith('/send_wtext'):
                 response = view.showView(project.send_wtext(param_table['id']))
+                response_is_list = True
+                content_enc = 'text'
+            elif path.startswith('/send_btext'):
+                response = view.showView(project.send_btext(param_table['id']))
                 response_is_list = True
                 content_enc = 'text'
             else:

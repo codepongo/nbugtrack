@@ -1,4 +1,5 @@
 /* XXX: My JavaScript is pretty bad: gotta learn it properly.. :( */
+/* Much of the following code is pretty similar...*/
 already_open = false;
 
 function new_project() {   
@@ -256,6 +257,64 @@ function saveWikiUpdateChanges()
 }
 
 function update_bug() {
+    already_open = true;
+    var eheader, ebug_status, stat_input, ebug_prio, prio_input, ebug_desc, desc_input;
+    eheader = $("header").html();
+    ebug_stat = $("#bug_stat").html();
+    ebug_prio = $("#bug_prio").html();
+    stat_input = '<input type="text" placeholder="'+ebug_stat+'" id="stat_input"> </input>';
+    prio_input = '<input type="text" placeholder="'+ebug_prio+'" id="prio_input"> </input>';
+    console.log(stat_input);
+    console.log(prio_input);
+    ebug_desc = $("#bug_desc").html();
+    desc_input = '<textarea id="desc_input" rows="10" cols="60"></textarea></textarea>'
+    var button = '<input type="button" value="Save Changes" class="saveButton" /> <input type="button" value="Revert Back" class="cancelButton"/></div></div></li>';
+
+    var inplace_text = ""
+
+    $.post("/send_btext", {id: $.trim($('#bugid').text())}, 
+	   function(data) {
+	       inplace_text = data;
+	       $('#desc_input').html(inplace_text);
+	   }, "text");
+    
+    $('#bug_stat').html(stat_input);
+    $('#bug_prio').html(prio_input);
+    $('#bug_desc').html(desc_input);
+    $('header').html(eheader + "<br /> <br />"+ button);
+    $('.saveButton').click(function() {saveBugUpdateChanges(ebug_stat, ebug_prio, ebug_desc, eheader);});
+    $('.cancelButton').click(function() {	
+	$('#bug_stat').html(ebug_stat);
+	$('#bug_prio').html(ebug_prio);
+	$('#bug_desc').html(ebug_desc);
+	$('header').html(eheader);
+	already_open = false;
+    });			   
+    $('#desc_input').focus();
+}
+
+function saveBugUpdateChanges(ebug_stat, ebug_prio, ebug_desc, eheader)
+{
+    var new_bug_stat = document.getElementById("stat_input").value;
+    var new_bug_prio = document.getElementById("prio_input").value;
+    var new_bug_desc = document.getElementById("desc_input").value;
+
+    if (new_bug_stat == "") new_bug_stat = ebug_stat;
+    if (new_bug_prio == "") new_bug_prio = ebug_prio;
+
+    if(new_bug_desc !== ebug_desc || new_bug_stat !== ebug_stat || new_bug_prio !== ebug_prio) {     // if one of them is changed
+	already_open = false;
+	$.post("/update_bug", {id: $("#bugid").text(), desc: new_bug_desc, prio: new_bug_prio, stat: new_bug_stat}, 
+	   function() {
+	       window.location.reload();
+	   });
+    } else {       // I'll just reset the state
+	$('#bug_stat').html(ebug_stat);
+	$('#bug_prio').html(ebug_prio);
+	$('#bug_desc').html(ebug_desc);
+	$('header').html(eheader);
+	already_open = false; 
+    }
 }
 
 function delete_bug() {
