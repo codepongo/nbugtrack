@@ -22,7 +22,6 @@ def list_projects():
 
 def new_project(name, desc):
     ''' add a new project to the projects table'''
-    print("i'm called"+name+desc)
     db.exec_cmd(nbt_global.def_dbname, 'insert into projects values(?,?)',(name,desc))
     return list_projects()
 
@@ -41,7 +40,6 @@ def update_project(name, desc):
 def delete_project(name):
     ''' delete the project, associated wiki pages and bugs'''
     project_id = str(db.exec_cmd(nbt_global.def_dbname, 'select rowid from projects where shortname=?',(name,))[0][0]) # has to be a tuple
-    print(project_id)
     db.exec_cmd(nbt_global.def_dbname,'delete from wiki where projectid=?',(project_id))
     db.exec_cmd(nbt_global.def_dbname,'delete from bugs where projectid=?',(project_id))
     db.exec_cmd(nbt_global.def_dbname,'delete from projects where rowid=?',(project_id))
@@ -50,7 +48,9 @@ def delete_project(name):
 def view_project(project_name="",id=""):
     ''' view the project contents, bugs, wiki info.
     '''
-    if project_name != "": 
+    if project_name == "favicon.ico": # Kludge: couldn't find a proper regex
+        return send_file("favicon.ico")
+    elif project_name != "":
         project_id = str(db.exec_cmd(nbt_global.def_dbname, 'select rowid from projects where shortname=?',(project_name,))[0][0]) # has to be a tuple
         project_description = str(db.exec_cmd(nbt_global.def_dbname, 'select description from projects where rowid=?',(project_id,))[0][0])
         return [[project_name, project_description, get_bugs(project_id), get_wiki(project_id)], "view_project"]
@@ -92,8 +92,6 @@ def view_wiki(project_name="", id=""):
 
 def new_bug(project_name, shortname):
     ''' create a new bug'''
-    print(project_name)
-    print(shortname)
     project_id = str(db.exec_cmd(nbt_global.def_dbname, 'select rowid from projects where shortname=?',(project_name,))[0][0]) # has to be a tuple
     db.exec_cmd(nbt_global.def_dbname, 'insert into bugs values(?,?,?,?,?)', (project_id,shortname,"Please add a detailed description of your bug. \n\nEvery useful bug report says three things: \n\n* Steps to Reproduce \n\n* What you expected to see \n\n* What you saw instead\n\n","Medium","Medium"))
     return view_project(id=project_id)
@@ -159,7 +157,7 @@ def send_file(filename = ""):
         elif ext == '.css':
             folder_path="css"
             mtype = "text/css"
-        elif ext == '.png' or ext == '.jgp':
+        elif ext == '.png' or ext == '.jgp' or ext == '.ico':
             text_type = False
             folder_path="img"
             mtype = "image/"+ext[1:]

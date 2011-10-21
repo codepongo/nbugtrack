@@ -6,6 +6,7 @@ from nbt_global import DEBUG
 
 # Some people, when confronted with a problem, think "I know, I'll use regular 
 # expressions." Now they have two problems.  --jwz (http://www.jwz.org/hacks/gdb-highlight.el)
+
 rtable = {
 ######## all get requests #######################
     '\/*$': 'list_projects',
@@ -20,7 +21,6 @@ rtable = {
     '\/*js\/*([\w\-\.]+)$': 'send_file',
     '\/*css\/*([\w\-\.]+)$': 'send_file',
     '\/*img\/*([\w\-\.]+)$': 'send_file',
-    '\/*favicon.ico$': 'send_file'
 } # updates are done with POST
 
 # re.compile(lvalue).match(query) -> eval(rvalue)
@@ -32,6 +32,6 @@ def match(query):
 
         if exists != None:
             exec_string = rtable[pattern]+'('+', '.join('\"'+i+'\"' for i in list(exists.groups()))+')'
-            DEBUG(exec_string,err_chr='E')
+            DEBUG(pattern+": "+exec_string,err_chr='E')
             return eval('project.'+exec_string)
         
