@@ -145,12 +145,9 @@ def send_file(filename = ""):
     ''' send any requested file'''
     text_type = True
 
-    if filename == "":
-        full_name = "templates/"+"favicon.ico"
-        mtype = "image/ico"
-    else:
+    if filename != "":
         ext = os.path.splitext(filename)[1]
-    
+        
         if ext == '.js':
             folder_path="js"
             mtype = "text/javascript"
@@ -162,7 +159,7 @@ def send_file(filename = ""):
             folder_path="img"
             mtype = "image/"+ext[1:]
         full_name = "templates/"+folder_path+"/"+filename
-
+        
     if os.path.exists(full_name):
         if text_type:
             return [open(full_name, encoding="utf-8").read(),mtype] if nbt_global.python_version == '3' else [open(full_name).read(),mtype]
