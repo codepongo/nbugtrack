@@ -13,6 +13,8 @@ This is:
 * Great for Personal Projects (coz, there are no users ;)
 * No bitching in the Comments Area (coz, there are no comments ;)
 
+(Personally, I use it for everything: notes, todo lists...)
+
 ## HOW TO RUN: ##
 
 1. Download and Extract the zip file.
