@@ -1,6 +1,5 @@
 
-# these functions provide wrappers around
-# sqlite's data base functionality
+# wrapper around sqlite's data base functionality
 
 import nbt_global
 import sqlite3

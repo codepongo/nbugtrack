@@ -67,8 +67,13 @@ def nbugtrack(environ, start_response):
             if nbt_global.python_version == '3':
                 if image_encoding == True:
                     return [gzip.compress(bytes(response))]
-            
-            return [gzip.compress(bytes(response,"utf-8"))] if nbt_global.python_version == '3' else [compress(response)]  # gzip compression
+                else:
+                    return [gzip.compress(bytes(response,"utf-8"))]
+
+            try:  # gzip compression
+                return [compress(unicode.encode(response, encoding="utf_8"))] 
+            except TypeError:
+                return [compress(str(response))]
 
         elif response == None:
             headers = [('Content-type', 'text/plain')]
@@ -93,7 +98,7 @@ def nbugtrack(environ, start_response):
             request_len = int(environ['CONTENT_LENGTH'])
             request = environ['wsgi.input'].read(request_len)
             param_table = parse_fn(request)
-            # XXX: I should put another dispatch table for post requests in router
+            # XXX: I should put another dispatch table for post requests in router, as this is exactly the mess, I thought I'd avoid...
 
             invalid_chars = "[\#\$\@\!\^\&\*]+"
 
@@ -127,11 +132,12 @@ def nbugtrack(environ, start_response):
             elif path.startswith('/send_wtext'):
                 response = view.showView(project.send_wtext(param_table['id']))
                 response_is_list = True
-                content_enc = 'text'
+#                content_enc = 'text'
             elif path.startswith('/send_btext'):
                 response = view.showView(project.send_btext(param_table['id']))
+                print(response)
                 response_is_list = True
-                content_enc = 'text'
+#                content_enc = 'text'
             else:
                 response = "No Content"
         except Exception as e:
@@ -139,7 +145,7 @@ def nbugtrack(environ, start_response):
             response = "error" 
 
         if response_is_list: # for the jquery response
-            response =  str(response[0])
+            response = response[0]
        
         status = '200 OK'
         headers = [('Content-type', 'text/html'), 
@@ -151,9 +157,9 @@ def nbugtrack(environ, start_response):
         start_response(status, headers)
         
         if response_is_list:            
-            return [response]
+            return [gzip.compress(bytes(str(response), 'utf-8'))] if sys.version[:1] == '3' else [compress(unicode.encode(response, 'utf_8'))]
         
-        return [gzip.compress(bytes(response, "utf-8"))] if sys.version[:1] == '3' else [compress(response)]  # gzip compression
+        return [gzip.compress(bytes(response, "utf-8"))] if sys.version[:1] == '3' else [compress(unicode(response))]  # gzip compression
 
 # gzip compression for strings was added from 3.0, the following
 # functions make it work with 2.x:
@@ -179,7 +185,7 @@ def decompress(data):
 # parse a xxx-url-form-encoded request
 def parse_form_urlencoded_request(request_body):
     var_alist = {}
-    request_body = str(request_body, 'utf-8') if nbt_global.python_version == '3' else str(request_body)
+    request_body = nbt_global.unicode_32(request_body)
     for i in request_body.split('&'):
         if i != "":
             nv = i.split('=')
@@ -217,10 +223,10 @@ def parse_multipart_formdata_request(request_body):
             break
 
     return var_alist
-            
-if __name__ == '__main__':
-    port_to_run = 8765 # default port
 
+def startup():
+    port_to_run = 8765 # default port
+    
     try:
         if len(sys.argv) == 2:
             port_to_run = argv[1]
@@ -229,3 +235,6 @@ if __name__ == '__main__':
         httpd.serve_forever()
     except KeyboardInterrupt:
         exit()
+
+if __name__ == '__main__':
+    startup()

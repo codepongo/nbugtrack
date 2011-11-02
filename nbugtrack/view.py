@@ -45,8 +45,8 @@ def show_projects(content):
     
     proj_html = '''<div id="proj_listing"><ol>'''
     for proj_data in content:
-        name = str(proj_data[0])
-        desc = str(proj_data[1]) # unicode to string
+        name = nbt_global.unicode_32(proj_data[0])
+        desc = nbt_global.unicode_32(proj_data[1]) # unicode to string
         
         proj_html += '''<li><div id="proj_data">'''
         proj_html += '''<div class="proj_name"><a href="'''+name+'''/">'''+name+'''</a></div>''' #+'''<div class="proj_desc">'''+desc+'''</div>'''
@@ -56,8 +56,8 @@ def show_projects(content):
 
 def view_this_project(content):
     ''' view the project description; bugs and wiki pages associated with it'''
-    name = str(content[0])
-    description = str(content[1])
+    name = nbt_global.unicode_32(content[0])
+    description = nbt_global.unicode_32(content[1])
     bugs_list = content[2]
     wiki_list = content[3]
     
@@ -76,7 +76,7 @@ def show_bugs(content):
     bugs_html += '''<tr><th>Bug Title</th><th>Priority</th><th>Status</th></tr>'''
     
     for bugs_data in content:
-        bugid, projectid, name,bug_description,priority,status = (str(i) for i in bugs_data)
+        bugid, projectid, name,bug_description,priority,status = (nbt_global.unicode_32(i) for i in bugs_data)
         bugs_html += '''<tr><td><a href="bug/?id='''+bugid+'''">'''+name[:nbt_global.def_shortchars]+('...' if len(name) > nbt_global.def_shortchars else '')+'''</a></td>'''+'''<td><a href="bug/?id='''+bugid+'''">'''+priority+'''</a></td>'''+'''<td><a href="bug/?id='''+bugid+'''">'''+status+'''</a></td></tr>'''
         
     bugs_html += '''</table></div>'''
@@ -89,7 +89,7 @@ def show_wiki(content):
                    <ul class="list_wiki">'''
 
     for wiki_data in content:
-        wikiid, projectid, name, content = (str(i) for i in wiki_data)
+        wikiid, projectid, name, content = (nbt_global.unicode_32(i) for i in wiki_data)
 
         wiki_html += '''<li><a href="wiki/?id='''+wikiid+'''">'''+name[:nbt_global.def_shortchars]+('...' if len(name) > nbt_global.def_shortchars else '')+'''</a></li>'''
 
@@ -97,16 +97,16 @@ def show_wiki(content):
     return wiki_html
 
 def view_this_bug(content):
-    bugid, projectid, name, desc, prio, stat = [str(i) for i in content[0]]
+    bugid, projectid, name, desc, prio, stat = [nbt_global.unicode_32(i) for i in content[0]]
 
     bug_html = '''<div id="bug_data">'''
     bug_html += '''Status: <div id="bug_stat">'''+stat+'''</div><br />'''
     bug_html += '''Priority: <div id="bug_prio">'''+prio+'''</div>'''
     
     if markdown_available == True:
-        bug_html += '''<br />Description: <div id="bug_desc">'''+str(markdown.markdown(desc))+'''</div>'''
+        bug_html += '''<br />Description: <div id="bug_desc">'''+nbt_global.unicode_32(markdown.markdown(desc))+'''</div>'''
     else:
-        bug_html += '''<br />Description: <div id="bug_desc"><pre>'''+str(desc)+'''</pre></div>'''
+        bug_html += '''<br />Description: <div id="bug_desc"><pre>'''+nbt_global.unicode_32(desc)+'''</pre></div>'''
 
     bug_html += '<br /><a id="delete_trigger" href="#" onclick="delete_bug()">'+'Delete this bug'+'</a>' 
     bug_html += "</div>"
@@ -114,16 +114,16 @@ def view_this_bug(content):
     return default_template.replace("$page_body",bug_html).replace("$page_header",'<a href="../">Bug</a>: <a href="#" onclick="update_bug()">'+name+'</a> (<span id="bugid">'+bugid+"</span>)").replace('$page_title',"Bug: "+name)
 
 def view_this_wiki(content):
-    pageid, projectid, pagename, pagecontent = [str(i) for i in content[0]]
+    pageid, projectid, pagename, pagecontent = [nbt_global.unicode_32(i) for i in content[0]]
 
     page_html = '''<div id="wiki_page">'''
 
     page_html += '<br /><a id="update_trigger" href="#" onclick="update_wiki()">'+'Edit this wiki'+'</a>' 
 
     if markdown_available == True:
-        page_html += '''<div id="wiki_content">'''+str(markdown.markdown(pagecontent))+'''</div>'''
+        page_html += '''<div id="wiki_content">'''+nbt_global.unicode_32(markdown.markdown(pagecontent))+'''</div>'''
     else:
-        page_html += '''<div id="wiki_content"><pre>'''+str(pagecontent)+'''</pre></div>'''
+        page_html += '''<div id="wiki_content"><pre>'''+nbt_global.unicode_32(pagecontent)+'''</pre></div>'''
     page_html += '<br /><a id="delete_trigger" href="#" onclick="delete_wiki()">'+'Delete this wiki'+'</a>' 
     page_html += '''</div>'''
 

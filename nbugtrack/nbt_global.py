@@ -11,6 +11,14 @@ bugs_table = "create table bugs (projectid integer, shortname text, description 
 wiki_table = "create table wiki (projectid integer, shortname text, content text, foreign key(projectid) references project(rowid));"
 python_version = sys.version[:1]
 
+def unicode_32(req_str):
+    ''' smooth over unicode changes between python versions '''
+    try:
+        ret_str =  str(req_str, 'utf-8') if python_version == '3' else unicode(req_str)
+        return ret_str
+    except TypeError:
+        return str(req_str)
+
 def DEBUG(exception, info="", err_chr="D"):
     ''' prints a nice debug log '''
 
