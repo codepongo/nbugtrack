@@ -6,8 +6,7 @@ import sqlite3
 
 def exec_cmd(dbname, cmd_string, qualifier=""):
     ''' execute the command on the database '''
-    print(cmd_string)
-    print(qualifier)
+    print("exec_cmd: "+cmd_string+" => "+str(qualifier))
 
     try:
         conn = sqlite3.connect(dbname)
@@ -25,7 +24,7 @@ def exec_cmd(dbname, cmd_string, qualifier=""):
             if query_result != None:
                 return query_result
         else:
-            nbt_global.DEBUG("exec_cmd: ",cmd_string,"!")
+            nbt_global.DEBUG("exec_cmd: ", cmd_string,"!")
     except Exception as e:
-        nbt_global.DEBUG("exec_cmd: "+str(e),cmd_string,"!")
+        nbt_global.DEBUG("exec_cmd: "+str(e), cmd_string,"!")
 

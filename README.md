@@ -18,8 +18,8 @@ This is:
 ## HOW TO RUN: ##
 
 1. Download and Extract the zip file.
-2. `cd <extracted_folder>/nbugtrack`
-3. `python nbugtrack.py`
+2. `cd <extracted_folder>`
+3. `python run.py`
 4. Open the URL in your browser.
 
 ## DEPS: ##

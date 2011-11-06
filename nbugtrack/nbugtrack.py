@@ -98,6 +98,7 @@ def nbugtrack(environ, start_response):
             request_len = int(environ['CONTENT_LENGTH'])
             request = environ['wsgi.input'].read(request_len)
             param_table = parse_fn(request)
+
             # XXX: I should put another dispatch table for post requests in router, as this is exactly the mess, I thought I'd avoid...
 
             invalid_chars = "[\#\$\@\!\^\&\*]+"
@@ -127,17 +128,15 @@ def nbugtrack(environ, start_response):
                 response = view.showView(project.new_bug(param_table['project_name'],param_table['shortname']))
             elif path.startswith('/update_bug'):
                 response = view.showView(project.update_bug(param_table['id'], [param_table['desc'], param_table['prio'], param_table['stat']]))
+                print(response) # XXX
             elif path.startswith('/update_wiki'):
                 response = view.showView(project.update_wiki(param_table['id'], param_table['content']))
             elif path.startswith('/send_wtext'):
                 response = view.showView(project.send_wtext(param_table['id']))
                 response_is_list = True
-#                content_enc = 'text'
             elif path.startswith('/send_btext'):
                 response = view.showView(project.send_btext(param_table['id']))
-                print(response)
                 response_is_list = True
-#                content_enc = 'text'
             else:
                 response = "No Content"
         except Exception as e:
@@ -157,9 +156,9 @@ def nbugtrack(environ, start_response):
         start_response(status, headers)
         
         if response_is_list:            
-            return [gzip.compress(bytes(str(response), 'utf-8'))] if sys.version[:1] == '3' else [compress(unicode.encode(response, 'utf_8'))]
+            return [gzip.compress(bytes(response, 'utf-8'))] if sys.version[:1] == '3' else [compress(unicode.encode(response, 'utf_8'))]
         
-        return [gzip.compress(bytes(response, "utf-8"))] if sys.version[:1] == '3' else [compress(unicode(response))]  # gzip compression
+        return [gzip.compress(bytes(response, 'utf-8'))] if sys.version[:1] == '3' else [compress(unicode.encode(response, 'utf_8'))]  # gzip compression
 
 # gzip compression for strings was added from 3.0, the following
 # functions make it work with 2.x:
@@ -190,7 +189,6 @@ def parse_form_urlencoded_request(request_body):
         if i != "":
             nv = i.split('=')
             var_alist[nv[0]] = urllib.parse.unquote_plus(nv[1]) if nbt_global.python_version == '3' else urllib.unquote_plus(nv[1])
-    print(var_alist)
     return var_alist
 
 # parse a multipart/form-data post request

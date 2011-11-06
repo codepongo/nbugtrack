@@ -118,12 +118,14 @@ def update_bug(id, params):
     ''' update the bug'''
     description,priority,status = params
     db.exec_cmd(nbt_global.def_dbname, 'update bugs set description=?, priority=?, status=? where rowid=?', (description, priority, status, id,))
+#    print("UPDATE_BUG")
     return view_bug(id=id)
 
 def update_wiki(id, content):
     ''' deletes the wiki page'''
     project_id = str(db.exec_cmd(nbt_global.def_dbname, 'select projectid from wiki where rowid=?', (id,))[0][0])
     db.exec_cmd(nbt_global.def_dbname, 'update wiki set content=? where rowid=?', (content, id))
+#    print("UPDATE_WIKI")
     return view_wiki(id=id)
 
 def rename_wiki(id, newname):
