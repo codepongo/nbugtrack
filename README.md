@@ -17,10 +17,11 @@ This is:
 
 ## HOW TO RUN: ##
 
-1. Download and Extract the zip file.
+1. Download and Extract the zip file
 2. `cd <extracted_folder>`
 3. `python run.py`
-4. Open the URL in your browser.
+4. The projects page should open in your browser
+5. *NEW* Keyboard shortcuts: try 'n' for new project, 'w' and 'b' for new wiki.
 
 ## DEPS: ##
 

@@ -13,6 +13,10 @@ body {
     font-family: "Helvetica", "Calibri", sans-serif !important;
 }
 
+.delete {
+    color: #f00 !important;
+}
+
 a {
     text-decoration: none !important;
     color: #333 !important;
@@ -77,11 +81,11 @@ td a{
 }
   
 th {
-    color: #000;
-    background: #c5c5c5;
-    font-size: 1.05em;
-    font-style: bold;
-    border: 1px solid #000;
+    text-align: left;
+    color: #fff;
+    background: #000;
+    font-size: 1.0em;
+    padding: 0.25em;
 }
 
 td {

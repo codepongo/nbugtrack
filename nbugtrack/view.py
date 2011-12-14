@@ -64,7 +64,7 @@ def view_this_project(content):
     details_html = '''<div id="project_details_data">''' + '''<div id="project_description">''' + '<a id="update_trigger" href="#" onclick="update_project()">'+description +'</a>'+ '''</div></div>'''
     details_html += show_bugs(bugs_list[0])
     details_html += show_wiki(wiki_list[0])
-    details_html += '<br /><a id="delete_trigger" href="#" onclick="delete_project()">'+'Delete this project'+'</a>' 
+    details_html += '<br /><a id="delete_trigger" href="#" class="delete" onclick="delete_project()">'+'Delete this project'+'</a>' 
     return default_template.replace("$page_body",details_html).replace("$page_header",'<a href="/">Project</a>: '+'<a id="rename_trigger" href="#" onclick="rename_project()">'+name+'</a>').replace("$page_title",'Project: '+name)
 
 def show_bugs(content):
@@ -108,7 +108,7 @@ def view_this_bug(content):
     else:
         bug_html += '''<br />Description: <div id="bug_desc"><pre>'''+nbt_global.unicode_32(desc)+'''</pre></div>'''
 
-    bug_html += '<br /><a id="delete_trigger" href="#" onclick="delete_bug()">'+'Delete this bug'+'</a>' 
+    bug_html += '<br /><a id="delete_trigger" href="#" class="delete" onclick="delete_bug()">'+'Delete this bug'+'</a>' 
     bug_html += "</div>"
 
     return default_template.replace("$page_body",bug_html).replace("$page_header",'<a href="../">Bug</a>: <a href="#" onclick="update_bug()">'+name+'</a> (<span id="bugid">'+bugid+"</span>)").replace('$page_title',"Bug: "+name)
@@ -124,7 +124,7 @@ def view_this_wiki(content):
         page_html += '''<div id="wiki_content">'''+nbt_global.unicode_32(markdown.markdown(pagecontent))+'''</div>'''
     else:
         page_html += '''<div id="wiki_content"><pre>'''+nbt_global.unicode_32(pagecontent)+'''</pre></div>'''
-    page_html += '<br /><a id="delete_trigger" href="#" onclick="delete_wiki()">'+'Delete this wiki'+'</a>' 
+    page_html += '<br /><a id="delete_trigger" href="#" class="delete" onclick="delete_wiki()">'+'Delete this wiki'+'</a>' 
     page_html += '''</div>'''
 
     return default_template.replace("$page_body",page_html).replace("$page_header",'<a href="../">Wiki</a>: <a id="rename_trigger" href="#" onclick="rename_wiki()">'+pagename+'</a> (<span id="pageid">'+pageid+"</span>)").replace("$page_title","Wiki: "+pagename)

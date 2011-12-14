@@ -6,6 +6,7 @@ import io
 import time
 import re
 import urllib
+import webbrowser
 
 import nbt_global
 import router
@@ -228,6 +229,12 @@ def startup():
     try:
         if len(sys.argv) == 2:
             port_to_run = argv[1]
+        
+        try:
+            webbrowser.open_new_tab('http://localhost:'+str(port_to_run))
+        except:
+            pass
+
         print("Open http://localhost:"+str(port_to_run)+" in your browser...")
         httpd = make_server('', port_to_run, nbugtrack)
         httpd.serve_forever()

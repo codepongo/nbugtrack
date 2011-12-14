@@ -1,7 +1,13 @@
 /* XXX: My JavaScript is pretty bad: gotta learn it properly.. :( */
-/* Much of the following code is pretty similar...*/
+/* Much of the following code is pretty similar... */
 already_open = false;
 invalid_chars = /[\#\$\@\!\^\&\*]+/;
+
+function enable_hotkeys() {
+    shortcut.add("w",new_wiki, {'type':'keydown','target':document, 'disable_in_input':true});
+    shortcut.add("b",new_bug,{'type':'keydown','target':document, 'disable_in_input':true});
+    shortcut.add("n",new_project,{'type':'keydown','target':document, 'disable_in_input':true});
+}
 
 function new_project() {   
     if (!already_open) {
@@ -341,4 +347,6 @@ function delete_wiki() {
 }
 
 $(document).ready(function(){
+    enable_hotkeys();
 });
+
