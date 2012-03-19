@@ -2,16 +2,11 @@
 README for Version 0.1
 ----------------------
 
-## PITCH: ##
-
-Oh yeah, so yet another Bugzilla clone eh? Well, not so! 
-
 This is:
 
 * Simple to Use and Setup
 * Includes a Wiki
-* Great for Personal Projects (coz, there are no users ;)
-* No bitching in the Comments Area (coz, there are no comments ;)
+* Great for Personal Projects (coz, there are no users or comments :-)
 
 (Personally, I use it for everything: notes, todo lists...)
 
@@ -21,7 +16,7 @@ This is:
 2. `cd <extracted_folder>`
 3. `python run.py`
 4. The projects page should open in your browser
-5. *NEW* Keyboard shortcuts: try 'n' for new project, 'w' and 'b' for new wiki.
+5. Keyboard shortcuts: try 'n' for new project, 'w' and 'b' for new wiki.
 
 ## DEPS: ##
 
@@ -47,7 +42,6 @@ Tested with:
 * MySQL / Postgres Database Support
 * Authentication / Users (SSL)
 * Comments, Assignees, Duplicate Bugs, Email Floods :-P
-* Scalable web servers: nginx, mongrell2, ...
 * Configs, Preferences for categories, styles and all that jazz
 * A little command line tool (nbt) to post bugs
 
